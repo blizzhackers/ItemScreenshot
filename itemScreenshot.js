@@ -75,9 +75,11 @@ var itemScreenshot = {
         }
 
         var lines = desc.split("\n");
+
+        console.log(lines);
         
         for (var line in lines) {
-            out.push({ text: lines[line], color: this.textColorMap[0] })
+            out.push({ text: lines[line], color: [this.textColorMap[0]] });
         }
     
         // Lines are normally in reverse. Add color tags if needed and reverse order.
@@ -90,16 +92,26 @@ var itemScreenshot = {
                 if (out[i].text.indexOf("Required Strength") > -1   || //Todo add class specific items too
                     out[i].text.indexOf("Required Dexterity") > -1  ||
                     out[i].text.indexOf("Required Level") > -1) {
-                    out[i].color = this.textColorMap[0];
-                } else if (out[i].text.match(/^ÿc/)) {
-                    out[i].color = this.textColorMap[parseInt(out[i].text.substring(2, 3))];
-                } else if (out[i].text.match(/^xffc/)) {
-                    out[i].color = this.textColorMap[parseInt(out[i].text.substring(4, 5))];
+                    out[i].text = out[i].text.replace(/^(xff)|ÿc([0-9!"+<;.*])/g, "");
+                    // Not necessary.. already done in initialisation above:
+                    //out[i].color[0] = this.textColorMap[0];
+                } else {
+                    out[i].text = out[i].text.replace(/((xff)|ÿc)/, "");
+                    out[i].color[0] = this.textColorMap[parseInt(out[i].text[0])];
+                    out[i].text = out[i].text.substring(1);
                 }
+                
+				// Remove all buggy color codes..
+				while(out[i].text.match(/^((xff)|ÿc([0-9!"+<;.*]))/))
+					out[i].text = out[i].text.replace(/(xff)|ÿc([0-9!"+<;.*])/g, "");
+				
+				// second color in same row will always be blue/'magic'
+                if (out[i].text.match(/(xff)|ÿc/))
+                    out[i].color.push("#787CE7");
             }
     
-            out[i].text = out[i].text.replace(/ÿc([0-9!"+<;.*])/g, "");
-            out[i].text = out[i].text.replace(/xffc([0-9!"+<;.*])/g, "");
+			// using '$' as delimiter for inline color change here..
+            out[i].text = out[i].text.replace(/(xff)|ÿc([0-9!"+<;.*])/g, "\$");
             out[i].text = out[i].text.replace(/\\/g, "");
         }
         
@@ -192,14 +204,32 @@ var itemScreenshot = {
             graphics.filter = "blur(0.2px)";
 
             for (var index in strArray1) {
-                pos = {
-                    x: canvas.width / 2,
-                    y: (index * num2 + Top + num2 - 3.0) // -1 originally
-                };
-                graphics.fillStyle = strArray1[index].color;
-                graphics.textAlign = "center";
-                graphics.fillText(strArray1[index].text, pos.x, pos.y);
-            }
+				pos = {
+					x: canvas.width / 2,
+					y: (index * num2 + Top + num2 - 3.0) // -1 originally
+				};
+				
+				graphics.fillStyle = strArray1[index].color[0];
+				
+				if(strArray1[index].color.length > 1) {
+					// inline color fix
+					// This doesn't work as expected
+					//shift = ctx.measureText(strArray1[index]).width / 2;
+					leftText = strArray1[index].text.split("$")[0];
+					rightText = strArray1[index].text.split("$")[1];
+					// ugly hack.. measuring the concatenated string yields a much higher result which is just wrong...
+					shift = (ctx.measureText(leftText).width + ctx.measureText(rightText).width) / 2
+					graphics.textAlign = "left";
+					graphics.fillText(leftText, pos.x - shift, pos.y);
+					graphics.fillStyle = strArray1[index].color[1];
+					graphics.fillText(strArray1[index].text.split("$")[1], pos.x + ctx.measureText(leftText).width - shift, pos.y);
+				} else {
+					graphics.textAlign = "center";
+					graphics.fillText(strArray1[index].text, pos.x, pos.y);
+				}
+				
+				
+			}
         }
 
     }
