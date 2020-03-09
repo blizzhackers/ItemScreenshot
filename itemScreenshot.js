@@ -1,20 +1,38 @@
 //Item screenshots
 
-//Test data
-
-//imageSource = "iVBORw0KGgoAAAANSUhEUgAAAB0AAAAdCAYAAABWk2cPAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAM2SURBVEhL5datUiNREAVgBCIiAhGBiEBERCAiEBERiAgEIgKBQEQgEIiIiBXIPAACgUDwACv2DWfnu8wJE5JdfnbFVu2t6rq/06fP6b63Zu+fbPv7+9VHrDn+d9pwOKwuZ2dbdn5+Xp2dvfYnJydVv9//8wB6vV51czUrdn19Xaw9n8/nL2s3N8UuLy+rw8PDPwPF4O7urlosFsVpABIAu729Lft6e9PTSdXtdr8GTCqAq9Vq7XS5XFZ3y8WGWbu/v1+fEwipvyTzZDKpnh5Wa2esANWBXF1dlfxNxqOSU3OqTKfTcs7ap0E7nU6RCgMgYVmY1nM5BTgc9Au4YmPWMFVovYODz4EeHx8Xhk+PD4WdAAB/u52v2dq37ux4PC4sqWNNgQnoU2xnZy/SMkDJaRswZh3A6elpkdicmTfu3m9KnnMs71fLAlquSc0A4NoEUJuAgGJJ2qgym80+XsXyguHz83NxugatTa701ph7KZeqFSgw0jJ7g8HgfYkdcBhLZjwd1w7rQEgOsFRxzVSFUmU0GhVQc4VnHyjGcv0uaKT98f2xsDqoK7A3OCzOVakgLi4uCoj1sMOInLmv1oBb86o17rebiBRCWHKEoaoUsbwBAo4dcIwB2zMHGrZh7Pwv2XbqDYUAEFuHUxh6D8DR0VFha05O+RSIIMx9G6bMud++Tj70QSmgmgFJRR+pjK1RALigOMxrRI08Js4Lltnr93Y8FCIhhUgDSjKGgUccCAfAAWGRF+otqPWAqo3R8GibrWePE1clOeGcfFh5dRRFcsVp+hJgfY5SxsxeUgJUbWyBkkweyeujSJq8BCBg2aNOqeS6QqlizZl8F1DXroF6bT4EFtBIEydtQGv2MJNjlsqmRr4Fmivmjm+8TslnkaZmmyjboG1megyACtaVYfIOQH7VARMEYGzVRAP5ej8jW6IMaCIvUtUOABszIHFuHGYpPn3mG6CanHACjNMAG+vDPo7jPAGYA2bm+jD2uFCl2+1s55VEcdB2tsWgdsLaMhqzyOlsgFW/29HAbDZlHydxlDEHcZS9XWZfQO0HpHG/u8ntW/PLEQcqNGNP5q7zscblf9/29n4C74whT6WUcEMAAAAASUVORK5CYII=";
-//descSource = "ÿc8Vex Rune\nÿc0Can be Inserted into Socketed Items\nÿc0\nÿc0Weapons: 7% Mana stolen per hit\nÿc0Armor: +5% to Maximum Fire Resist\nÿc0Helms: +5% to Maximum Fire Resist\nÿc0Shields: +5% to Maximum Fire Resist\nÿc0\nÿc1Required Level: 55$2669491491:635:7:1:7";
-
-imageSource = "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";
-descSource = "ÿc5Superior Wsdfsdsdfire Fleece\nÿc0Defense: ÿc3544\nÿc0Durability: 22 of 32\nÿc1Required Strength: 111\nÿc1Required Level: 53\nÿc3+13% Enhanced Defense\nÿc3Socketed (3)$2624566070:432:3:2:0";
-
-testItem = {
+// Somewhat regular item
+testItem1 = {
     "itemColor":14,
     "image":"mgl",
     "title":"Trang-Oul's Claws Heavy Bracers",
     "description":"\xffc2Trang-Oul's Claws (99)\n\xffc2Heavy Bracers\n\xffc0Defense: \xffc374\n\xffc0Durability: 16 of 16\n\xffc0Required Strength: 58\n\xffc0Required Level: 45\n\xffc3+2 to Curses (Necromancer Only)\n\xffc3+20% Faster Cast Rate\n\xffc3+25% to Poison Skill Damage\n\xffc3+30 Defense\n\xffc3Regenerate Mana 255%\n\xffc3Cold Resist +30%\n\xffc4\n\xffc4Trang-Oul's Avatar\n\xffc1Trang-Oul's Girth\n\xffc2Trang-Oul's Claws\n\xffc1Trang-Oul's Wing\n\xffc1Trang-Oul's Scales\n\xffc2\xffc1Trang-Oul's Guise$15:382:7:0:6",
-    "header":"Single Player / BonedUrAss",
+    "header":"header stuff",
     "sockets":[]
+};
+
+// Purple item for color testing
+testItem2 = {
+    "itemColor":18,
+    "image":"gth",
+    "title":"Tal Rasha's Guardianship Lacquered Plate",
+    "description":"\xffc2Tal Rasha's Guardianship (90)\n\xffc2Lacquered Plate\n\xffc0Defense: \xffc3919\n\xffc0Durability: 55 of 55\n\xffc0Required Strength: 84\n\xffc0Required Level: 71\n\xffc3+2 to All Skills\n\xffc3+25% Faster Run/Walk\n\xffc3+20% Faster Hit Recovery\n\xffc3+400 Defense\n\xffc3All Resistances +40\n\xffc3Damage Reduced by 25%\n\xffc3Magic Damage Reduced by 15\n\xffc3Requirements -60%\n\xffc3Socketed (1)\n\xffc4\n\xffc4Tal Rasha's Wrappings\n\xffc1Tal Rasha's Horadric Crest\n\xffc2Tal Rasha's Guardianship\n\xffc1Tal Rasha's Lidless Eye\n\xffc1Tal Rasha's Adjudication\n\xffc2\xffc1Tal Rasha's Fine-Spun Cloth$18:440:7:4:0",
+    "header":"header stuff",
+    "sockets":["gemsocket"]
+};
+
+//Ethereal item with stuff socketed in it
+testItem3 = {
+    "itemColor":-1,
+    "image":"ltp",
+    "title":"Fortitude Archon Plate",
+    "description":"\xffc4Fortitude (90)\n\xffc5Archon Plate\n\xffc4'ElSolDolLo'\n\xffc0Defense: \xffc32490\n\xffc0Durability: 60 of 69\n\xffc0Required Strength: 93\n\xffc0Required Level: 63\n\xffc320% Chance to cast level 15 Chilling Armor when struck\n\xffc3+25% Faster Cast Rate\n\xffc3+300% Enhanced Damage\n\xffc3+215% Enhanced Defense\n\xffc3+15 Defense\n\xffc3+198 to Life (Based on Character Level)\n\xffc3Replenish Life +7\n\xffc3+5% to Maximum Lightning Resist\n\xffc3All Resistances +30\n\xffc3Damage Reduced by 7\n\xffc312% Damage Taken Goes To Mana\n\xffc3+1 to Light Radius\n\xffc3Increase Maximum Durability 15%\n\xffc3Ethereal (Cannot be Repaired), Socketed (4)$76:443:3:2:0:eth",
+    "header":"header stuff",
+    "sockets":[
+        "r01",
+        "r28",
+        "r14",
+        "r12"
+    ]
 };
 
 var itemScreenshot = {
@@ -68,7 +86,7 @@ var itemScreenshot = {
                 } else if (out[i].text.match(/^ÿc/)) {
                     out[i].color = this.textColorMap[parseInt(out[i].text.substring(2, 3))];
                 } else if (out[i].text.match(/^xffc/)) {
-                    out[i].color = this.textColorMap[parseInt(out[i].text.substring(2, 5))];
+                    out[i].color = this.textColorMap[parseInt(out[i].text.substring(4, 5))];
                 }
             }
     
@@ -144,6 +162,10 @@ var itemScreenshot = {
                     canvas.height = num2 * strArray1.length + Top + 1;
                     document.getElementById("itemList").append(canvas);
                     var graphics = canvas.getContext('2d');
+                    
+                    console.log("Setting black canvas")
+                    graphics.fillStyle = "rgba(0, 0, 0, 1)";
+                    graphics.fillRect(0, 0, canvas.width, canvas.height);
 
                     var bitmap2 = new Image();
                     bitmap2.src = itemScreenshot.bgnd[Y-1];
@@ -157,7 +179,9 @@ var itemScreenshot = {
                         graphics.fillRect((canvas.width - image.width) / 2, 5, image.width, image.height);
                         
                         console.log("Drawing item");
+                        if (item.description.toLowerCase().indexOf("ethereal") > -1) graphics.globalAlpha = 0.5;
                         graphics.drawImage(image, (canvas.width - image.width) / 2, 5);
+                        graphics.globalAlpha = 1;
                         
                         console.log("Drawing cursor");
                         var cursor = new Image();
