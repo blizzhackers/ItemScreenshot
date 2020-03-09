@@ -49,8 +49,6 @@ var itemScreenshot = {
         }
 
         var lines = desc.split("\n");
-
-        console.log(lines);
         
         for (var line in lines) {
             out.push({ text: lines[line], color: this.textColorMap[0] })
@@ -83,7 +81,6 @@ var itemScreenshot = {
     },
 
     cleanDecription: function (description) {
-
         return this.getItemDesc(description.toString().split("$")[0]);
     },
 
@@ -101,7 +98,6 @@ var itemScreenshot = {
             },
             active: function() {
                 for (var line in strArray1) {
-                    console.log(strArray1[line]);
                     size = ctx.measureText(strArray1[line].text);
                     if (size.width > num1) {
                         num1 = size.width;
@@ -179,7 +175,8 @@ var itemScreenshot = {
                             graphics.font = ctx.font;
                             graphics.filter = "blur(0.2px)";
                             graphics.textAlign = "center";
-                            graphics.fillText((ctx.font.includes("Exocet") ? strArray1[index].text.toUpperCase() : strArray1[index].text), pos.x, pos.y);
+                            //graphics.fillText((ctx.font.includes("Exocet") ? strArray1[index].text.toUpperCase() : strArray1[index].text), pos.x, pos.y);
+                            graphics.fillText(strArray1[index].text, pos.x, pos.y);
                         }
                     }
                 }
