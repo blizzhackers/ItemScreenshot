@@ -132,12 +132,16 @@ var itemScreenshot = {
             var bitmap2 = new Image();
             bitmap2.src = "data:image/png;base64, " + itemScreenshot.bgnd[Y-1];
             
+            var hand = new Image();
+            hand.src = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAUpSURBVFhH7VVbbxNHGD2767XXXtvrdWyTOI6dhJCkCdCA1Aq1RaERSK2qCkWovwL6C6r+g9LyVPHWtz70rWqLRCtVFClSAJVQ0iSkEHLDOI6d+LK+rL2X6eyQBFSC5Cap+sKRVrOXmfnOnO873+LU26fIF59/RkbeHCH4H8Cvr68AqoqrX1/FyZGTu5H474n1dPeQC+MXyLUfrpEzo2deDOjcs+vo8FEydm6MjI6OktGx0QMjxW2NSB1OkZgaw5Uvr+DyV5cxMTmBbCaL6KEo2sMhvPPWaeS0IjZyG1jfWGdr5ubmdtbvFfzWiOWFZS6fz+Pipxfx4ekxJDuTiEejyGVzKJTq2GxoeHB3ErzIw03cTJfhoeF9K/HSCRwlAlIAly5ews/Xf8Lv9+5jfHwcx4aP4fFfc+B4CXem7qCiV1DIFwABmJ2e3bMSuy7s6OggSlDBQN8AKvUK+hMd+ODjT9B/tB83frmBci6Pyem7WF1YhdbU4BJcmJmd2ROJnRS8iEwmw5W0EhYWFxCPxcEFgnB73bh1+xaqehWGxCESikAOy7BsC1pZw5HBI3tKB2Pdl+gjSkzB4OFBTP05hdm5Wc5RQfaIiByKs+C9vb3o6+mD3tTh9/pRKVfQ0CpYyy1jfiGN9fw6lpaX/rUKbIFjQ1uwcXbsLDq8PH787Q4ajQaKpSJs24ZfFqEEY0j2JBGQA1DDKtrUNgwMDSD9YBG3H9zDxMQEjIaBbDa7s28rYClYXFrkYAI3r9/E979O4vxH53H8xHFEohE2CZYHTkqepJ9AK2ZR1+roinfR+hMQTXRCFmXIXpkFj4ajz9a0iOc2XF7mmlwTpVoJ3373DYpZenrTRjDgQd2oo1wuI72apvNysMwSREmERaytnmCgK6ayfWqNGrq7u1uuh5ekSiaTxOZs8ISH1+VF3azDsA1knmSgKAoCgQD63+jH2XdPo7C2hhWapoikIFcrYvreNFNKURXUK3WIgoimVYHSFsX9u/d3TcuuL+PxOOF5HpZlQRAENpomzRGFz+eC7FMhiiI4jkNQDkKlp196+BAVWjc+nw+iS4TZMFHTa2xOxO+GLPB4WrNYgbONnrV4+vUVSCQSxLAMmiMeskeGbuqAi36gPEKyxJ5tniplPws4Nz/H1g0PHkEooEBtC4IQL4q0fYdjYRRXl5CnpIhBUNhcR4QW8sz8QmvVmkqlWE55jodNbLoxYe5w4Jf9MC0Tpm0ye2pVDZ3xTiTaE5BcJiVgIp1No2k0YVs2ms0muw9wFtq7Olu3y4tI9aYIMQlTxwkccLlhigKajSYEXsBgim4scvCJEgy3DwKpMMek1/I4MeTBrakNOtdEKKLujcA2nDQ5o6MGgU6D++gPzE8bVwThQ2GEVSp9ocisKXgE2A0b1XIVuqXD0i009PxzG+4FzqbbMA26oaYhX6BWpk4o5AqoblYRDoVZDTkkzaYJr+pFKp5CMb+ImaWV/SngYFuFhtGA1+Nlv+vz73fh0Sqo5BqUsIL2aDutX1rBlO9T2jXX6jVq4QLWisVXu6BVyDJIh9oHzdBgGDp8koT3hqJYzhOUm4DH48HI4RQyFR2PHs2gnNlAtlrdibtvAg6c5uU0K87m4JV5BHwRZtEgRyBIPFYez6NAXVws6i/F21cNbMNpNrAAL+9lowOjrmFj08Qfs/NYXNO53YI7OBAFnD5hENq0bNq0ggJKT0vUE/quJ/4nDoRAKCQRCRK7dwI7aCX4gcIh4Vxbj6/xGq/RIoC/AZDFSgg9Wf7KAAAAAElFTkSuQmCC";            
             
             bitmap2.onload = function() {
                 console.log("Drawing background");
                 graphics.drawImage(bitmap2, canvas.width / 2 - Left, -9); // top -10 originally
+                console.log("Drawing item-active background");
+                graphics.fillStyle = "rgba(0, 128, 0, 0.2)";
+                graphics.fillRect((canvas.width - image.width) / 2, 5, image.width, image.height);
                 console.log("Drawing item");
-                
                 graphics.drawImage(image, (canvas.width - image.width) / 2, 5);
                 console.log("Drawing text");
                 // Todo: colors may change within a single line!
@@ -148,11 +152,13 @@ var itemScreenshot = {
                     };
                     graphics.fillStyle = strArray1[index].color;
                     graphics.font = ctx.font;
-                    graphics.filter = "blur(0.2px)";
+                    graphics.filter = "blur(0.1px)";
                     graphics.textAlign = "center";
                     graphics.fillText((ctx.font.includes("Exocet") ? strArray1[index].text.toUpperCase() : strArray1[index].text), pos.x, pos.y);
                 }
-            }
+                console.log("Drawing cursor");
+                graphics.drawImage(hand, (canvas.width + image.width) / 2 - 10, 5 + 10);
+                        }
         }
                 
                 
