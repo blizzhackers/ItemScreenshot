@@ -1,4 +1,7 @@
 @font-face {
     font-family: 'AvQuest';
-    src: url('./webfonts/Avqest.woff') format('woff'), url('./webfonts/Avqest.svg#Avqest') format('svg');
+    src: url('./webfonts/AvQuest.woff') format('woff'), url('./webfonts/AvQuest.svg') format('svg');
+
+    /*font-family: 'Exocet';
+    src: url('./webfonts/ExocetBlizzard.woff') format('woff'), url('./webfonts/ExocetBlizzard.svg#Exocet') format('svg');*/
 }
