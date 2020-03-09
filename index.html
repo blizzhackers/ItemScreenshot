@@ -5,19 +5,9 @@
 		<title>Screenshot</title>
 		<style type="text/css">
 			@font-face {
-			  font-family: 'AvalonQuest';
-				src: url('./css/webfonts/AvalonQuest.woff') format('woff'),
-				url('./css/webfonts/AvalonQuest.svg#AvalonQuest') format('svg');
-				font-weight: normal;
-				font-style: normal;
-			}
-			
-			@font-face {	
-			  font-family: 'Exocet';
-				src: url('./css/webfonts/Exocet.woff') format('woff'),
-				url('./css/webfonts/Exocet.svg#Exocet') format('svg');
-				font-weight: normal;
-				font-style: normal;
+				font-family: 'AvQuest';
+				src: url('./css/webfonts/Avqest.woff') format('woff'),
+				url('./css/webfonts/Avqest.svg#Avqest') format('svg');
 			}
 		</style>
 	</head>
@@ -109,12 +99,12 @@
 			// wait for font to load
 			WebFont.load({
 				custom: {
-					families: ['AvalonQuest', 'Exocet']
+					families: ['AvQuest']
 				},
 				active: function() {
 					for (var line in strArray1) {
 						console.log(strArray1[line]);
-						ctx.font = "12pt Exocet";
+						ctx.font = "bold 1.5em AvQuest";
 						size = ctx.measureText(strArray1[line].text);
 						if(size.width > num1)
 							num1 = size.width;
@@ -173,6 +163,7 @@
 							
 							graphics.drawImage(image, (canvas.width - image.width) / 2, 5);
 							console.log("Drawing text");
+							// Todo: colors may change within a single line!
 							for (var index in strArray1) {
 								pos = {
 									x: canvas.width / 2,
@@ -180,6 +171,7 @@
 								};
 								graphics.fillStyle = strArray1[index].color;
 								graphics.font = ctx.font;
+								graphics.filter = "blur(0.2px)";
 								graphics.textAlign = "center";
 								graphics.fillText((ctx.font.includes("Exocet") ? strArray1[index].text.toUpperCase() : strArray1[index].text), pos.x, pos.y);
 							}
