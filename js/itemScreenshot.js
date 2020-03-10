@@ -6,41 +6,6 @@ WebFont.load({
     }
 });
 
-// Somewhat regular item
-testItem1 = {
-    "itemColor":14,
-    "image":"mgl",
-    "title":"Trang-Oul's Claws Heavy Bracers",
-    "description":"\xffc2Trang-Oul's Claws (99)\n\xffc2Heavy Bracers\n\xffc0Defense: \xffc374\n\xffc0Durability: 16 of 16\n\xffc0Required Strength: 58\n\xffc0Required Level: 45\n\xffc3+2 to Curses (Necromancer Only)\n\xffc3+20% Faster Cast Rate\n\xffc3+25% to Poison Skill Damage\n\xffc3+30 Defense\n\xffc3Regenerate Mana 255%\n\xffc3Cold Resist +30%\n\xffc4\n\xffc4Trang-Oul's Avatar\n\xffc1Trang-Oul's Girth\n\xffc2Trang-Oul's Claws\n\xffc1Trang-Oul's Wing\n\xffc1Trang-Oul's Scales\n\xffc2\xffc1Trang-Oul's Guise$15:382:7:0:6",
-    "header":"header stuff",
-    "sockets":[]
-};
-
-// Purple item for color testing
-testItem2 = {
-    "itemColor":18,
-    "image":"gth",
-    "title":"Tal Rasha's Guardianship Lacquered Plate",
-    "description":"\xffc2Tal Rasha's Guardianship (90)\n\xffc2Lacquered Plate\n\xffc0Defense: \xffc3919\n\xffc0Durability: 55 of 55\n\xffc1Required Strength: 84\n\xffc1Required Level: 71\n\xffc3+2 to All Skills\n\xffc3+25% Faster Run/Walk\n\xffc3+20% Faster Hit Recovery\n\xffc3+400 Defense\n\xffc3All Resistances +40\n\xffc3Damage Reduced by 25%\n\xffc3Magic Damage Reduced by 15\n\xffc3Requirements -60%\n\xffc3Socketed (1)\n\xffc4\n\xffc4Tal Rasha's Wrappings\n\xffc1Tal Rasha's Horadric Crest\n\xffc2Tal Rasha's Guardianship\n\xffc1Tal Rasha's Lidless Eye\n\xffc1Tal Rasha's Adjudication\n\xffc2\xffc1Tal Rasha's Fine-Spun Cloth$18:440:7:4:0",
-    "header":"header stuff",
-    "sockets":["gemsocket"]
-};
-
-//Ethereal item with stuff socketed in it
-testItem3 = {
-    "itemColor":-1,
-    "image":"ltp",
-    "title":"Fortitude Archon Plate",
-    "description":"\xffc4Fortitude (90)\n\xffc5Archon Plate\n\xffc4'ElSolDolLo'\n\xffc0Defense: \xffc32490\n\xffc0Durability: 60 of 69\n\xffc1Required Strength: 93\n\xffc1Required Level: 63\n\xffc320% Chance to cast level 15 Chilling Armor when struck\n\xffc3+25% Faster Cast Rate\n\xffc3+300% Enhanced Damage\n\xffc3+215% Enhanced Defense\n\xffc3+15 Defense\n\xffc3+198 to Life (Based on Character Level)\n\xffc3Replenish Life +7\n\xffc3+5% to Maximum Lightning Resist\n\xffc3All Resistances +30\n\xffc3Damage Reduced by 7\n\xffc312% Damage Taken Goes To Mana\n\xffc3+1 to Light Radius\n\xffc3Increase Maximum Durability 15%\n\xffc3Ethereal (Cannot be Repaired), Socketed (4)$76:443:3:2:0:eth",
-    "header":"header stuff",
-    "sockets":[
-        "r01",
-        "r28",
-        "r14",
-        "r12"
-    ]
-};
-
 var itemScreenshot = {
     limedrop: false,
     hideRequirements: true,
@@ -389,7 +354,10 @@ var itemScreenshot = {
             graphics.globalAlpha = 1;
             
             console.log("Drawing cursor");
-            graphics.drawImage(itemScreenshot.hand, (canvas.width + image.width) / 2 - 5, 5 + 5);
+            function rnd(min, max) {
+              return Math.floor(Math.random() * (max - min + 1) ) + min;
+            }
+            graphics.drawImage(itemScreenshot.hand, (canvas.width + image.width) / 2 - rnd(2,15), 5 + rnd(2,15));
 
             console.log("Drawing text");
             graphics.font = ctx.font;
@@ -424,5 +392,41 @@ var itemScreenshot = {
 			}
         }
 
+    },
+    
+    // Pack canvases to obtain the smallest enclosing rect possible
+    sortCanvases: function () {
+        var packer = new GrowingPacker();
+        var blocks = [];
+        var list = $("#itemList");
+        var canvas = document.createElement('canvas');
+        canvas.width = 0;
+        canvas.height = 0;
+        list.children().each(function(idx) {
+            var padding = parseInt($(this).css("padding-top"));
+            blocks.push({item: $(this), w: $(this).width() + padding, h: $(this).height() + padding});
+            
+        });
+        
+        blocks.sort(function(a,b) { return (b.h - a.h); });
+        packer.fit(blocks);
+        
+        canvas.width += packer.root.w;
+        canvas.height += packer.root.h;
+
+        var container = canvas.getContext('2d');
+        
+        for(var n = 0 ; n < blocks.length ; n++) {
+            var block = blocks[n];
+            if (block.fit) {
+                container.drawImage(block.item[0], block.fit.x, block.fit.y);
+            } else {
+                console.error("Couldn't pack image to canvas (Width Height):", block.w, block.h, "max. allowed size (Width Height):", packer.root.w, packer.root.h);
+            }
+        }
+
+        $("#itemList").empty();
+        $("#itemList").addClass("visible");
+        document.getElementById("itemList").append(canvas);
     }
 }
