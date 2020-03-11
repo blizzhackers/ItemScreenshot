@@ -25,7 +25,7 @@ Items = {
             "r01",
             "r28",
             "r14",
-            "r12"
+            "gemsocket"
         ]
     },
     "testItem4": { //Torch
