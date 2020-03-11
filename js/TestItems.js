@@ -13,7 +13,7 @@ Items = {
         "title":"Tal Rasha's Guardianship Lacquered Plate",
         "description":"\xffc2Tal Rasha's Guardianship (90)\n\xffc2Lacquered Plate\n\xffc0Defense: \xffc3919\n\xffc0Durability: 55 of 55\n\xffc1Required Strength: 84\n\xffc1Required Level: 71\n\xffc3+2 to All Skills\n\xffc3+25% Faster Run/Walk\n\xffc3+20% Faster Hit Recovery\n\xffc3+400 Defense\n\xffc3All Resistances +40\n\xffc3Damage Reduced by 25%\n\xffc3Magic Damage Reduced by 15\n\xffc3Requirements -60%\n\xffc3Socketed (1)\n\xffc4\n\xffc4Tal Rasha's Wrappings\n\xffc1Tal Rasha's Horadric Crest\n\xffc2Tal Rasha's Guardianship\n\xffc1Tal Rasha's Lidless Eye\n\xffc1Tal Rasha's Adjudication\n\xffc2\xffc1Tal Rasha's Fine-Spun Cloth$18:440:7:4:0",
         "header":"header stuff",
-        "sockets":["gemsocket"]
+        "sockets":["jew5"]
     },
     "testItem3": { //Ethereal item with stuff socketed in it
         "itemColor":-1,
@@ -30,7 +30,7 @@ Items = {
     },
     "testItem4": { //Torch
         "itemColor":-1,
-        "image":"cm22",
+        "image":"invtrch",
         "title":"Hellfire Torch",
         "description":"\xffc4Hellfire Torch\n\xffc4Large Charm\n\xffc0Keep in Inventory to Gain Bonus\n\xffc1Required Level: 75\n\xffc35% Chance to cast level 10 Firestorm on striking\n\xffc3+3 to Amazon Skill Levels\n\xffc3+20 to all Attributes\n\xffc3All Resistances +12\n\xffc3+8 to Light Radius\n\xffc3Level 30 Hydra (10/10 Charges)$1007589987:604:7:5:4",
         "header":"header stuff",
@@ -84,8 +84,7 @@ Items = {
         "header":"header stuff",
         "sockets":[
             "gemsocket",
-            "gemsocket",
-            "gemsocket",
+            "jew1",
             "gemsocket"
         ]
     }
