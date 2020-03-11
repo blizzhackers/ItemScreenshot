@@ -1,13 +1,26 @@
-//Item screenshots
+/*!
+ * itemScreenshot Library v1.0
+ * https://github.com/Fa-b/ItemScreenshot
+ * 
+ * A pure js solution to generate Diablo II item tooltips from json objects
+ * Obj format is the standard kolbot mulelogged item
+ * 
+ * Authors: Fa-b, laztheripper
+ * Date: 2020/03/11
+ */
 
 var itemScreenshot = {
-    hideItemLevel       : true,
+    // Settings
+    
+    hideItemLevel       : false,
     hideRequirements    : true,
     hideSetCompletion   : true,
     showItemColor       : true,
     drawCursor          : true,
     drawSockets         : true,
     drawEthereal        : true,
+
+    // ------ No touchy ------
 
     font:   (function () { WebFont.load({custom: {families: ['AvQuest']}}); return "AvQuest";   }).call(),
     hand:   (function () { let img = new Image(); img.src = "assets/hand.png";      return img; }).call(),
@@ -27,8 +40,8 @@ var itemScreenshot = {
         "#787CE7",      // MAGIC
         "#948064",      // UNIQUE
         "#505050",      // DARK GRAY
-        "WhiteSmoke",
-        "WhiteSmoke",
+        "#505050",      // NOT USED
+        "#505050",      // NOT USED
         "#D08420",      // CRAFT
         "#D8B864"       // RARE
     ],
@@ -152,9 +165,13 @@ var itemScreenshot = {
         num2 = 16; //parseInt(ctx.font);
         
         console.log("Width:", num1);
+        
+        if (item.itemColor === -1) {
+            item.itemColor = 21;
+        }
 
         var image = new Image();
-        image.src = "assets/gfx/" + item.image + ".png";
+        image.src = "assets/gfx/" + item.image + "/" + item.itemColor + ".png";
         
         image.onload = () => {
             var X, Y, Top, Left = 0
@@ -377,7 +394,7 @@ var itemScreenshot = {
 
                     if (item.sockets[i] === "gemsocket") continue;
                     var img = new Image();
-                    img.src = "assets/gfx/" + item.sockets[i] + ".png";
+                    img.src = "assets/gfx/" + item.sockets[i] + "/21.png";
                     img.onload = (function(pos){
                         return function() {
                             graphics.drawImage(
