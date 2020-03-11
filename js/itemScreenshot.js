@@ -1,6 +1,7 @@
 //Item screenshots
 
 var itemScreenshot = {
+    hideItemLevel       : true,
     hideRequirements    : true,
     hideSetCompletion   : true,
     showItemColor       : true,
@@ -77,6 +78,10 @@ var itemScreenshot = {
     
                 i += 1;
             } else {
+                if (i === 0 && this.hideItemLevel && out[i].text.indexOf(" (") > -1) {
+                    out[i].text = out[i].text.split(" (")[0];
+                }
+
                 // Remove all buggy color codes first ..
                 out[i].text = out[i].text.replace(/^((xff)|ÿc)/, "");
 				out[i].text = out[i].text.replace(/[0-9]((xff)|ÿc)/g, "");
