@@ -186,10 +186,10 @@ var itemScreenshot = {
             graphics.globalAlpha = 1.0;
             
             if (this.drawSockets) {
-                let num3 = 2.5; // (item.width - image.width) / 2 originally
+                let num3 = Math.round((canvas.width - image.width) / 2); // (item.width - image.width) / 2 originally
                 let num4 = num3 + 14;
                 let num5 = num4 + 14;
-                let num6 = 2.5; // 5 originally
+                let num6 = 5; // 5 originally
                 let num7 = 34;
                 let num8 = 63;
                 let num9 = 92;
@@ -346,7 +346,11 @@ var itemScreenshot = {
                 
                 graphics.globalAlpha = 0.3;
                 socketPositions.forEach((position) => {
-                    graphics.drawImage(this.socket, ((canvas.width - image.width) / 2) + position.x - 4, 5 + position.y - 3);
+                    graphics.drawImage(
+                        this.socket,
+                        position.x,
+                        position.y
+                    );
                 });
                 graphics.globalAlpha = 1.0;
 
@@ -357,9 +361,9 @@ var itemScreenshot = {
                     img.onload = (function(pos){
                         return function() {
                             graphics.drawImage(
-                                this,
-                                ((canvas.width - image.width) / 2) + pos.x - 3,
-                                5 + pos.y - 4
+                                this,  // Socketed item
+                                pos.x, // X
+                                pos.y  // Y
                             );
                         };
                     })(socketPositions[i]);

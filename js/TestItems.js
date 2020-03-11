@@ -13,7 +13,7 @@ Items = {
         "title":"Tal Rasha's Guardianship Lacquered Plate",
         "description":"\xffc2Tal Rasha's Guardianship (90)\n\xffc2Lacquered Plate\n\xffc0Defense: \xffc3919\n\xffc0Durability: 55 of 55\n\xffc1Required Strength: 84\n\xffc1Required Level: 71\n\xffc3+2 to All Skills\n\xffc3+25% Faster Run/Walk\n\xffc3+20% Faster Hit Recovery\n\xffc3+400 Defense\n\xffc3All Resistances +40\n\xffc3Damage Reduced by 25%\n\xffc3Magic Damage Reduced by 15\n\xffc3Requirements -60%\n\xffc3Socketed (1)\n\xffc4\n\xffc4Tal Rasha's Wrappings\n\xffc1Tal Rasha's Horadric Crest\n\xffc2Tal Rasha's Guardianship\n\xffc1Tal Rasha's Lidless Eye\n\xffc1Tal Rasha's Adjudication\n\xffc2\xffc1Tal Rasha's Fine-Spun Cloth$18:440:7:4:0",
         "header":"header stuff",
-        "sockets":["gemsocket"]
+        "sockets":["jew5"]
     },
     "testItem3": { //Ethereal item with stuff socketed in it
         "itemColor":-1,
@@ -25,7 +25,7 @@ Items = {
             "r01",
             "r28",
             "r14",
-            "gemsocket"
+            "r12"
         ]
     },
     "testItem4": { //Torch
@@ -84,7 +84,7 @@ Items = {
         "header":"header stuff",
         "sockets":[
             "gemsocket",
-            "gemsocket",
+            "jew1",
             "gemsocket"
         ]
     }
