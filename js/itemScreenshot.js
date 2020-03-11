@@ -1,18 +1,16 @@
 //Item screenshots
 
-WebFont.load({
-    custom: {
-        families: ['AvQuest']
-    }
-});
-
-
-
 var itemScreenshot = {
     hideRequirements    : true,
+    hideSetCompletion   : true,
+    showItemColor       : true,
     drawCursor          : true,
     drawSockets         : true,
     drawEthereal        : true,
+
+    font:   (function () { WebFont.load({custom: {families: ['AvQuest']}}); return "AvQuest";   }).call(),
+    hand:   (function () { let img = new Image(); img.src = "assets/hand.png";      return img; }).call(),
+    socket: (function () { let img = new Image(); img.src = "assets/gemsocket.png"; return img; }).call(),
 
     bgnd: [
         (function () { let img = new Image(); img.src = "assets/bgnd1.png"; return img; }).call(),
@@ -20,10 +18,6 @@ var itemScreenshot = {
         (function () { let img = new Image(); img.src = "assets/bgnd3.png"; return img; }).call(),
         (function () { let img = new Image(); img.src = "assets/bgnd4.png"; return img; }).call()
     ],
-
-    hand: (function () { let img = new Image(); img.src = "assets/hand.png"; return img; }).call(),
-    
-    socket: (function () { let img = new Image(); img.src = "assets/gemsocket.png"; return img; }).call(),
 
     textColorMap: [
         "#C4C4C4",      // WHITE
@@ -38,12 +32,36 @@ var itemScreenshot = {
         "#D8B864"       // RARE
     ],
 
+    colorStrings: [
+        "Unknown Color",//0
+        "Black",		//1
+        "Unknown Color",//2
+        "Black",		//3
+        "Light Blue", 	//4
+        "Dark Blue",	//5
+        "Crystal Blue",	//6
+        "Light Red",	//7
+        "Dark Red",		//8
+        "Crystal Red",	//9
+        "Light Green",	//10
+        "Dark Green",	//11
+        "Crystal Green",//12
+        "Light Yellow",	//13
+        "Dark Yellow",	//14
+        "Light Gold",	//15
+        "Dark Gold",	//16
+        "light Purple",	//17
+        "Dark Purple",	//18
+        "Orange",		//19
+        "White"			//20
+    ],
+
     getItemDesc: function (desc) {
-        var i, out = [],
+        var i, out = [], setCompletionInd,
             stringColor = 0;
     
         if (!desc) {
-            return "";
+            return out;
         }
 
         var lines = desc.split("\n");
@@ -75,6 +93,10 @@ var itemScreenshot = {
                     // .. Otherwise get the real color
                     out[i].color[0] = this.textColorMap[parseInt(out[i].text[0])];
                 }
+
+                if (i > 3 && out[i].color[0] === "#948064") {
+                    setCompletionInd = i;
+                }
                 
                 // Remove colorcode from desc
 				out[i].text = out[i].text.substring(1);
@@ -88,6 +110,10 @@ var itemScreenshot = {
             out[i].text = out[i].text.replace(/(xff)|ÿc([0-9!"+<;.*])/g, "\$");
             out[i].text = out[i].text.replace(/\\/g, "");
         }
+
+        if (this.hideSetCompletion && setCompletionInd) {
+            out = out.slice(0, setCompletionInd - 1);
+        }
         
         return out;
     },
@@ -95,8 +121,6 @@ var itemScreenshot = {
     cleanDecription: function (description) {
         return this.getItemDesc(description.toString().split("$")[0]);
     },
-
-    loaded: {},
 
     create: function (item) {
         var strArray1 = this.cleanDecription(item.description);
@@ -111,6 +135,11 @@ var itemScreenshot = {
                 num1 = size.width;
             }
         }
+
+        if (this.showItemColor && item.itemColor !== -1) {
+            strArray1.push({ text: "", color: ["#505050"]});
+            strArray1.push({ text: this.colorStrings[item.itemColor], color: ["#505050"]});
+        }
         
         if (num1 < 100)
             num1 = 100;
@@ -118,18 +147,6 @@ var itemScreenshot = {
         num2 = 16; //parseInt(ctx.font);
         
         console.log("Width:", num1);
-
-        for (var i = 0; i < item.sockets.length; i++) {
-            if (item.sockets[i] === "gemsocket") continue;
-
-            var img = new Image();
-            img.src = "assets/gfx/" + item.sockets[i] + ".png";
-            img.onload = (function(name){
-                return function() {
-                    itemScreenshot.loaded[name] = this;
-                };
-            })(item.sockets[i]);
-        }
 
         var image = new Image();
         image.src = "assets/gfx/" + item.image + ".png";
@@ -182,14 +199,14 @@ var itemScreenshot = {
             
             console.log("Drawing item gfx")
             if (this.drawEthereal && item.description.toLowerCase().indexOf("ethereal") > -1) graphics.globalAlpha = 0.5;
-            graphics.drawImage(image, (canvas.width - image.width) / 2, 5);
+            graphics.drawImage(image, Math.round((canvas.width - image.width) / 2), 5);
             graphics.globalAlpha = 1.0;
             
             if (this.drawSockets) {
-                let num3 = Math.round((canvas.width - image.width) / 2); // (item.width - image.width) / 2 originally
+                let num3 = Math.round((canvas.width - image.width) / 2);
                 let num4 = num3 + 14;
                 let num5 = num4 + 14;
-                let num6 = 5; // 5 originally
+                let num6 = 5;
                 let num7 = 34;
                 let num8 = 63;
                 let num9 = 92;
@@ -343,18 +360,16 @@ var itemScreenshot = {
                 default:
                     break;
                 }
-                
-                graphics.globalAlpha = 0.3;
-                socketPositions.forEach((position) => {
-                    graphics.drawImage(
-                        this.socket,
-                        position.x,
-                        position.y
-                    );
-                });
-                graphics.globalAlpha = 1.0;
 
                 for (var i = 0; i < item.sockets.length && socketPositions.length; i++) {
+                    graphics.globalAlpha = 0.3;
+                    graphics.drawImage(
+                        this.socket,
+                        socketPositions[i].x - 2,
+                        socketPositions[i].y + 1
+                    );
+                    graphics.globalAlpha = 1.0;
+
                     if (item.sockets[i] === "gemsocket") continue;
                     var img = new Image();
                     img.src = "assets/gfx/" + item.sockets[i] + ".png";
@@ -372,7 +387,7 @@ var itemScreenshot = {
             
             if (this.drawCursor) {
                 console.log("Drawing cursor");
-                graphics.drawImage(itemScreenshot.hand, ((canvas.width + image.width) / 2) - 5, 5 + 5);
+                graphics.drawImage(itemScreenshot.hand, Math.round((canvas.width + image.width) / 2) - 5, 5 + 5);
             }
 
             console.log("Drawing text");
@@ -380,8 +395,8 @@ var itemScreenshot = {
             graphics.filter = "blur(0.2px)";
 
             for (var index in strArray1) {
-				pos = {
-					x: canvas.width / 2,
+				let pos = {
+					x: Math.round(canvas.width / 2),
 					y: (index * num2 + Top + num2 - 3.0) // -1 originally
 				};
 				
