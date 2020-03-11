@@ -5,3 +5,16 @@
     /*font-family: 'Exocet';
     src: url('./webfonts/ExocetBlizzard.woff') format('woff'), url('./webfonts/ExocetBlizzard.svg#Exocet') format('svg');*/
 }
+
+body {
+    background-color: rgb(45, 45, 45);
+}
+
+.itemlist {
+    text-align: center;
+}
+
+.itemlist canvas {
+    padding: 10px;
+    border: 2px solid rgba(150, 150, 150, 0.2);
+}

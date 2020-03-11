@@ -2,7 +2,9 @@
 
 <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
-<script src="itemScreenshot.js"></script>
+<script src='./js/packer.growing.js'></script>
+<script src="./js/itemScreenshot.js"></script>
+<script src="./js/TestItems.js"></script>
 
 <html dir="ltr" lang="en">
 	<head>
@@ -20,7 +22,13 @@
 </html>
 
 <script>
-setTimeout(function() { itemScreenshot.create(testItem3); }, 200);
-setTimeout(function() { itemScreenshot.create(testItem2); }, 200);
-setTimeout(function() { itemScreenshot.create(testItem1); }, 200);
+setTimeout(function() { 
+    for (var idx in Items){
+        itemScreenshot.create(Items[idx]);
+        // Todo, add onload callback or similar..
+    }
+}, 200);
+
+// And remove that ugly timeout :-(
+setTimeout(function() { itemScreenshot.sortCanvases(); }, 500);
 </script>
