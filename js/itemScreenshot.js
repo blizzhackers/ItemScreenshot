@@ -395,7 +395,7 @@ var itemScreenshot = {
                     if (item.sockets[i] === "gemsocket") continue;
                     var img = new Image();
                     img.src = "assets/gfx/" + item.sockets[i] + "/21.png";
-                    img.onload = (function(pos){
+                    img.onload = (function(pos) {
                         return function() {
                             graphics.drawImage(
                                 this,  // Socketed item
