@@ -12,10 +12,10 @@
 var itemScreenshot = {
     // Settings
     
-    hideItemLevel       : false,
-    hideRequirements    : true,
-    hideSetCompletion   : true,
-    showItemColor       : true,
+    hideItemLevel       : true,
+    hideRequirements    : false,
+    hideSetCompletion   : false,
+    showItemColor       : false,
     drawCursor          : true,
     drawSockets         : true,
     drawEthereal        : true,
@@ -99,7 +99,7 @@ var itemScreenshot = {
                 out[i].text = out[i].text.replace(/^((xff)|ÿc)/, "");
 				out[i].text = out[i].text.replace(/[0-9]((xff)|ÿc)/g, "");
                 
-                // Check if one of the requirements is not met if we decided to hide them
+                // Check if one of the requirements is not met or if we decided to hide them
                 if (this.hideRequirements && out[i].text.match(/^1/) &&
                     (out[i].text.match(/(strength:)/i) ||
                     out[i].text.match(/(dexterity:)/i) ||
@@ -162,9 +162,7 @@ var itemScreenshot = {
         if (num1 < 100)
             num1 = 100;
             
-        num2 = 16; //parseInt(ctx.font);
-        
-        console.log("Width:", num1);
+        num2 = 16;
         
         if (item.itemColor === -1) {
             item.itemColor = 21;
