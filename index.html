@@ -22,11 +22,11 @@
 </html>
 
 <script>
-setTimeout(function() { 
-    for (var idx in Items){
+window.onload = function() { 
+    for (var idx in Items) {
         itemScreenshot.create(Items[idx]);
     }
-}, 200);
+}
 
 //setTimeout(function() { itemScreenshot.sortCanvases(); }, 500);
 </script>
