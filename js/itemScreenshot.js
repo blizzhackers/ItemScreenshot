@@ -404,14 +404,6 @@ var itemScreenshot = {
                     })(socketPositions[i]);
                 }
             }
-            
-            if (this.drawCursor) {
-                console.log("Drawing cursor");
-                function rnd(min, max) {
-                  return Math.floor(Math.random() * (max - min + 1) ) + min;
-                }
-                graphics.drawImage(itemScreenshot.hand, (canvas.width + image.width) / 2 - (this.drawCursor=="rnd"?rnd(2,15):5), 5 + (this.drawCursor=="rnd"?rnd(2,15):5));
-            }
 
             console.log("Drawing text");
             graphics.font = ctx.font;
@@ -438,6 +430,14 @@ var itemScreenshot = {
 					graphics.fillText(strArray1[index].text, pos.x, pos.y);
 				}
 			}
+            
+            if (this.drawCursor) {
+                console.log("Drawing cursor");
+                function rnd(min, max) {
+                  return Math.floor(Math.random() * (max - min + 1) ) + min;
+                }
+                graphics.drawImage(itemScreenshot.hand, (canvas.width + image.width) / 2 - (this.drawCursor=="rnd"?rnd(2,15):5), 5 + (this.drawCursor=="rnd"?rnd(2,15):5));
+            }
         }
     },
 
