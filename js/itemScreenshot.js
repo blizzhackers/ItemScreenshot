@@ -125,7 +125,7 @@ var itemScreenshot = {
             }
     
 			// using '$' as delimiter for inline color change here..
-            out[i].text = out[i].text.replace(/(xff)|ÿc([0-9!"+<;.*])/g, "\$");
+            out[i].text = out[i].text.replace(/((xff)|ÿc)([0-9!"+<;.*])/g, "\$");
             out[i].text = out[i].text.replace(/\\/g, "");
         }
 
