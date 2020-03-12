@@ -16,7 +16,7 @@ var itemScreenshot = {
     hideRequirements    : false,
     hideSetCompletion   : false,
     showItemColor       : false,
-    drawCursor          : true,
+    drawCursor          : "rnd",
     drawSockets         : true,
     drawEthereal        : true,
 
@@ -407,7 +407,10 @@ var itemScreenshot = {
             
             if (this.drawCursor) {
                 console.log("Drawing cursor");
-                graphics.drawImage(itemScreenshot.hand, Math.round((canvas.width + image.width) / 2) - 5, 5 + 5);
+                function rnd(min, max) {
+                  return Math.floor(Math.random() * (max - min + 1) ) + min;
+                }
+                graphics.drawImage(itemScreenshot.hand, (canvas.width + image.width) / 2 - (this.drawCursor=="rnd"?rnd(2,15):5), 5 + (this.drawCursor=="rnd"?rnd(2,15):5));
             }
 
             console.log("Drawing text");
