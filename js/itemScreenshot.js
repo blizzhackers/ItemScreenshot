@@ -130,7 +130,7 @@ var itemScreenshot = {
         }
 
         if (this.hideSetCompletion && setCompletionInd) {
-            out = out.slice(0, setCompletionInd - 1);
+            out = out.slice(0, setCompletionInd);
         }
         
         return out;
@@ -406,11 +406,6 @@ var itemScreenshot = {
                     })(socketPositions[i]);
                 }
             }
-            
-            if (this.drawCursor) {
-                console.log("Drawing cursor");
-                graphics.drawImage(itemScreenshot.hand, Math.round((canvas.width + image.width) / 2) - 5, 5 + 5);
-            }
 
             console.log("Drawing text");
             graphics.font = ctx.font;
@@ -436,7 +431,14 @@ var itemScreenshot = {
 					graphics.textAlign = "center";
 					graphics.fillText(strArray1[index].text, pos.x, pos.y);
 				}
-			}
+            }
+
+            graphics.filter = "None";
+            
+            if (this.drawCursor) {
+                console.log("Drawing cursor");
+                graphics.drawImage(itemScreenshot.hand, Math.round((canvas.width + image.width) / 2) - 5, 5 + 5);
+            }
         }
     },
 

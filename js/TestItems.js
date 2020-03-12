@@ -87,6 +87,16 @@ Items = {
             "jew1",
             "gemsocket"
         ]
+    },
+
+    "testItem13": {
+        "itemColor": 18,
+        "image":"msk",
+        "title":"Tal Rasha's Horadric Crest Death Mask",
+        "description":"\xffc2Tal Rasha's Horadric Crest (99)\n\xffc2Death Mask\n\xffc0Defense: \xffc3131\n\xffc0Durability: 20 of 20\n\xffc0Required Strength: 55\n\xffc0Required Level: 66\n\xffc310% Mana stolen per hit\n\xffc310% Life stolen per hit\n\xffc3+45 Defense\n\xffc3+60 to Life\n\xffc3+30 to Mana\n\xffc3All Resistances +15\n\xffc3Socketed (1)\n\xffc4\n\xffc4Tal Rasha's Wrappings\n\xffc2Tal Rasha's Horadric Crest\n\xffc2Tal Rasha's Guardianship\n\xffc1Tal Rasha's Lidless Eye\n\xffc1Tal Rasha's Adjudication\n\xffc2\xffc1Tal Rasha's Fine-Spun Cloth$52:358:7:4:0",
+        "header":"Header",
+        "sockets":["gemsocket"]
     }
+
 
 }
