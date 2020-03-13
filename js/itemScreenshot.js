@@ -140,7 +140,7 @@ var itemScreenshot = {
         return this.getItemDesc(description.toString().split("$")[0]);
     },
 
-    create: function (item) {
+    drawScreenshot: function (item) {
         var strArray1 = this.cleanDecription(item.description);
         var num1 = 0;
         var tmp = document.createElement('canvas');
@@ -441,37 +441,47 @@ var itemScreenshot = {
         }
     },
 
-    sortCanvases: function () {
+    drawCompilation: function (items) {
         var packer = new GrowingPacker();
         var blocks = [];
         var list = $("#itemList");
         var canvas = document.createElement('canvas');
         canvas.width = 0;
         canvas.height = 0;
-        list.children().each(function(idx) {
-            var padding = parseInt($(this).css("padding-top"));
-            blocks.push({item: $(this), w: $(this).width() + padding, h: $(this).height() + padding});
-        });
         
-        blocks.sort(function(a,b) { return (b.h - a.h); });
-        packer.fit(blocks);
-        
-        canvas.width += packer.root.w;
-        canvas.height += packer.root.h;
-
-        var container = canvas.getContext('2d');
-        
-        for(var n = 0 ; n < blocks.length ; n++) {
-            var block = blocks[n];
-            if (block.fit) {
-                container.drawImage(block.item[0], block.fit.x, block.fit.y);
-            } else {
-                console.error("Couldn't pack image to canvas (Width Height):", block.w, block.h, "max. allowed size (Width Height):", packer.root.w, packer.root.h);
-            }
+        for (var idx in items) {
+            // Todo: add load callback
+            itemScreenshot.drawScreenshot(items[idx]);
         }
+        
+        // Todo: remove timeout
+        setTimeout(function() {
+            list.children().each(function(idx) {
+                var padding = parseInt($(this).css("padding-top"));
+                blocks.push({item: $(this), w: $(this).width() + padding, h: $(this).height() + padding});
+            });
+            
+            blocks.sort(function(a,b) { return (b.h - a.h); });
+            packer.fit(blocks);
+            
+            canvas.width += packer.root.w;
+            canvas.height += packer.root.h;
 
-        $("#itemList").empty();
-        $("#itemList").addClass("visible");
-        document.getElementById("itemList").append(canvas);
+            var container = canvas.getContext('2d');
+            
+            for(var n = 0 ; n < blocks.length ; n++) {
+                var block = blocks[n];
+                if (block.fit) {
+                    container.drawImage(block.item[0], block.fit.x, block.fit.y);
+                } else {
+                    console.error("Couldn't pack image to canvas (Width Height):", block.w, block.h, "max. allowed size (Width Height):", packer.root.w, packer.root.h);
+                }
+            }
+
+            $("#itemList").empty();
+            $("#itemList").addClass("visible");
+            document.getElementById("itemList").append(canvas);   
+        }, 200);
+        
     }
 }
