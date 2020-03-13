@@ -125,12 +125,12 @@ var itemScreenshot = {
             }
     
 			// using '$' as delimiter for inline color change here..
-            out[i].text = out[i].text.replace(/(xff)|ÿc([0-9!"+<;.*])/g, "\$");
+            out[i].text = out[i].text.replace(/((xff)|ÿc)([0-9!"+<;.*])/g, "\$");
             out[i].text = out[i].text.replace(/\\/g, "");
         }
 
         if (this.hideSetCompletion && setCompletionInd) {
-            out = out.slice(0, setCompletionInd - 1);
+            out = out.slice(0, setCompletionInd);
         }
         
         return out;
@@ -393,7 +393,7 @@ var itemScreenshot = {
                     if (item.sockets[i] === "gemsocket") continue;
                     var img = new Image();
                     img.src = "assets/gfx/" + item.sockets[i] + "/21.png";
-                    img.onload = (function(pos){
+                    img.onload = (function(pos) {
                         return function() {
                             graphics.drawImage(
                                 this,  // Socketed item

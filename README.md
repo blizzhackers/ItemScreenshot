@@ -7,3 +7,13 @@ Generates a 'screenshot like' image of provided item.<br>
 <p>A slightly different version of that tool can be found here: https://github.com/Fa-b/D2PaletteApply</p>
 <br>
 <p>Have fun :-).</p>
+<br>
+# Settings (true/false):<br>
+<br>
+hideItemLevel<br>
+hideRequirements<br>
+hideSetCompletion<br>
+showItemColor<br>
+drawCursor (hidden option 'rnd' for random cursor pos on item)<br>
+drawSockets<br>
+drawEthereal<br>
