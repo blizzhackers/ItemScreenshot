@@ -515,7 +515,7 @@ var Font16 = {
 
     font: [],
     
-    measureText(text) {
+    measureText: function(text) {
         lines = Array.isArray(text)?text:text.split("\n");
         width = 0;
         height = 0;
@@ -525,8 +525,8 @@ var Font16 = {
             for (var i = 0; i < line.length; i++) {
                 ch = line.charCodeAt(i);
                 if(ch < 256) {
-                    tmpw += this.kerning(ch * 2 + 1);
-                    tmph += this.kerning(ch * 2);
+                    tmpw += this.kerning[ch * 2 + 1];
+                    tmph += this.kerning[ch * 2];
                 }
             }
             

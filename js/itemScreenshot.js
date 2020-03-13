@@ -155,7 +155,7 @@ var itemScreenshot = {
         ctx.font = "bold 1.5em AvQuest";
 		
         for (var line in strArray1) {
-            let size = ctx.measureText(strArray1[line].text);
+            let size = Font16.measureText(strArray1[line].text);//ctx.measureText(strArray1[line].text);
             if (size.width > num1) {
                 num1 = size.width;
             }
@@ -416,35 +416,39 @@ var itemScreenshot = {
             graphics.font = ctx.font;
             graphics.filter = "blur(0.2px)";
 
-            for (var index in strArray1) {
+			var index = 0;
+            strArray1.forEach((line) => {
 				let pos = {
 					x: Math.round(canvas.width / 2),
-					y: (index * num2 + Top + num2 - 3.0) // -1 originally
+					y: (index * num2 + Top - 1.0) // -1 originally
 				};
 				
-                shift = ctx.measureText(strArray1[index].text).width / 2
-                
-                if(strArray1[index].color.length > 1) {
-					leftText = strArray1[index].text.split("$")[0];
-                    Font16.drawText(graphics, pos.x - shift, pos.y, strArray1[index].text, strArray1[index].color[0]);
-                    Font16.drawText(graphics, pos.x + ctx.measureText(leftText).width - shift, pos.y, strArray1[index].text, strArray1[index].color[1]);
+                shift = Font16.measureText(line.text).width / 2
+				
+                if(line.color.length > 1) {
+					leftText = line.text.split("$")[0];
+					rightText = line.text.split("$")[1];
+					// Apply back half the wrong measured kerning for char '$' width 10 / 2 = 5
+                    Font16.drawText(graphics, pos.x - shift + 5, pos.y, leftText, line.color[0]);
+                    Font16.drawText(graphics, pos.x - shift + 5 + Font16.measureText(leftText).width, pos.y, rightText, line.color[1]);
 				} else {
-					Font16.drawText(graphics, pos.x - shift, pos.y, strArray1[index].text, strArray1[index].color[0]);
+					Font16.drawText(graphics, pos.x - shift, pos.y, line.text, line.color[0]);
 				}
                 
-				/* if(strArray1[index].color.length > 1) {
-					leftText = strArray1[index].text.split("$")[0];
-					rightText = strArray1[index].text.split("$")[1];
+				/* if(line.color.length > 1) {
+					leftText = line.text.split("$")[0];
+					rightText = line.text.split("$")[1];
 					graphics.textAlign = "left";
 					graphics.fillText(leftText, pos.x - shift, pos.y);
-					graphics.fillStyle = this.textColorMap[strArray1[index].color[1]];
-					graphics.fillText(strArray1[index].text.split("$")[1], pos.x + ctx.measureText(leftText).width - shift, pos.y);
+					graphics.fillStyle = this.textColorMap[line.color[1]];
+					graphics.fillText(line.text.split("$")[1], pos.x + ctx.measureText(leftText).width - shift, pos.y);
 				} else {
 					graphics.textAlign = "center";
-					graphics.fillText(strArray1[index].text, pos.x, pos.y);
+					graphics.fillText(line.text, pos.x, pos.y);
 				} */
+				index += 1;
                 
-			}
+			});
             
             if (this.drawCursor) {
                 console.log("Drawing cursor");
@@ -496,7 +500,7 @@ var itemScreenshot = {
             $("#itemList").empty();
             $("#itemList").addClass("visible");
             document.getElementById("itemList").append(canvas);   
-        }, 200);
+        }, 1000);
         
     }
 }
