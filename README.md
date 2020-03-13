@@ -17,3 +17,9 @@ showItemColor<br>
 drawCursor (hidden option 'rnd' for random cursor pos on item)<br>
 drawSockets<br>
 drawEthereal<br>
+
+# Note
+Pushing loads of gfx to your repo might require you to increase the post buffer size to some really high value:<br>
+```
+git config http.postBuffer 524288000
+```
