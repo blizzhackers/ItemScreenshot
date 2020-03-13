@@ -8,7 +8,7 @@ Generates a 'screenshot like' image of provided item.<br>
 <br>
 <p>Have fun :-).</p>
 <br>
-# Settings (true/false):<br>
+# Settings (true/false):
 <br>
 hideItemLevel<br>
 hideRequirements<br>
