@@ -23,6 +23,10 @@ var itemScreenshot = {
     // ------ No touchy ------
 
     font:   (function () { WebFont.load({custom: {families: ['AvQuest']}}); return "AvQuest";   }).call(),
+    font16: [
+        Font16.loadFont(0)
+    ],
+    
     hand:   (function () { let img = new Image(); img.src = "assets/hand.png";      return img; }).call(),
     socket: (function () { let img = new Image(); img.src = "assets/gemsocket.png"; return img; }).call(),
 
@@ -33,18 +37,21 @@ var itemScreenshot = {
         (function () { let img = new Image(); img.src = "assets/bgnd4.png"; return img; }).call()
     ],
 
-    textColorMap: [
-        "#C4C4C4",      // WHITE
-        "#B04434",      // RED
-        "#18FC00",      // SET
-        "#787CE7",      // MAGIC
-        "#948064",      // UNIQUE
-        "#505050",      // DARK GRAY
-        "#505050",      // NOT USED
-        "#505050",      // NOT USED
-        "#D08420",      // CRAFT
-        "#D8B864"       // RARE
-    ],
+    textColorMap: {
+        0: "#C4C4C4",      // WHITE
+        1: "#B04434",      // RED
+        2: "#18FC00",      // SET
+        3: "#787CE7",      // MAGIC
+        4: "#948064",      // UNIQUE
+        5: "#505050",      // DARK GRAY
+        6: "#000000",      // BLACK (UNUSED)
+        7: "#AC9C64",      // OCHER (UNUSED)
+        8: "#D08420",      // CRAFT
+        9: "#D8B864",      // RARE
+        10: "#186408",     // DARK GREEN (UNUSED)
+        11: "#A420FC",     // PURPLE (UNUSED)
+        12: "#287C14"      // GREEN (UNUSED)
+    },
 
     colorStrings: [
         "Unknown Color",//0
@@ -81,7 +88,7 @@ var itemScreenshot = {
         var lines = desc.split("\n");
         
         for (var line in lines) {
-            out.push({ text: lines[line], color: [this.textColorMap[0]] });
+            out.push({ text: lines[line], color: [0] });
         }
     
         // Lines are normally in reverse. Add color tags if needed and reverse order.
@@ -106,13 +113,13 @@ var itemScreenshot = {
                     out[i].text.match(/(level:)/i) ||
                     out[i].text.match(/(only\))$/i)) ){
                     // Clear red colors if necessary
-                    out[i].color[0] = this.textColorMap[0];
+                    out[i].color[0] = 0;
                 } else {
                     // .. Otherwise get the real color
-                    out[i].color[0] = this.textColorMap[parseInt(out[i].text[0])];
+                    out[i].color[0] = parseInt(out[i].text[0]);
                 }
 
-                if (i > 3 && out[i].color[0] === "#948064") {
+                if (i > 3 && out[i].color[0] === 4) {
                     setCompletionInd = i;
                 }
                 
@@ -120,8 +127,8 @@ var itemScreenshot = {
 				out[i].text = out[i].text.substring(1);
 				
 				// second color in same row will always be blue/'magic'
-                if (out[i].text.match(/(xff)|ÿc/))
-                    out[i].color.push("#787CE7");
+                if (out[i].text.match(/((xff)|ÿc)/))
+                    out[i].color.push(3);
             }
     
 			// using '$' as delimiter for inline color change here..
@@ -156,7 +163,7 @@ var itemScreenshot = {
 
         if (this.showItemColor && item.itemColor !== -1) {
             strArray1.push({ text: "", color: ["#505050"]});
-            strArray1.push({ text: this.colorStrings[item.itemColor], color: ["#505050"]});
+            strArray1.push({ text: this.colorStrings[item.itemColor], color: [5]});
         }
         
         if (num1 < 100)
@@ -415,20 +422,28 @@ var itemScreenshot = {
 					y: (index * num2 + Top + num2 - 3.0) // -1 originally
 				};
 				
-				graphics.fillStyle = strArray1[index].color[0];
-				
-				if(strArray1[index].color.length > 1) {
+                shift = ctx.measureText(strArray1[index].text).width / 2
+                
+                if(strArray1[index].color.length > 1) {
+					leftText = strArray1[index].text.split("$")[0];
+                    Font16.drawText(graphics, pos.x - shift, pos.y, strArray1[index].text, strArray1[index].color[0]);
+                    Font16.drawText(graphics, pos.x + ctx.measureText(leftText).width - shift, pos.y, strArray1[index].text, strArray1[index].color[1]);
+				} else {
+					Font16.drawText(graphics, pos.x - shift, pos.y, strArray1[index].text, strArray1[index].color[0]);
+				}
+                
+				/* if(strArray1[index].color.length > 1) {
 					leftText = strArray1[index].text.split("$")[0];
 					rightText = strArray1[index].text.split("$")[1];
-					shift = (ctx.measureText(leftText).width + ctx.measureText(rightText).width) / 2
 					graphics.textAlign = "left";
 					graphics.fillText(leftText, pos.x - shift, pos.y);
-					graphics.fillStyle = strArray1[index].color[1];
+					graphics.fillStyle = this.textColorMap[strArray1[index].color[1]];
 					graphics.fillText(strArray1[index].text.split("$")[1], pos.x + ctx.measureText(leftText).width - shift, pos.y);
 				} else {
 					graphics.textAlign = "center";
 					graphics.fillText(strArray1[index].text, pos.x, pos.y);
-				}
+				} */
+                
 			}
             
             if (this.drawCursor) {
