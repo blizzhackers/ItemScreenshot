@@ -9,23 +9,21 @@
  * Date: 2020/03/11
  */
 
-var itemScreenshot = {
+var ItemScreenshot = {
     // Settings
     
-    hideItemLevel       : true,
-    hideRequirements    : false,
-    hideSetCompletion   : false,
-    showItemColor       : false,
-    drawCursor          : "rnd",
-    drawSockets         : true,
-    drawEthereal        : true,
+	fastMode			: false,	// Draw text using webfont (less pwetty but faster ofc)
+    hideItemLevel       : true,		// Hide the item level
+    hideRequirements    : false,	// Hide the red text when you can't wear an item
+    hideSetCompletion   : false,	// Hide the set completion
+    showItemColor       : false,	// Show the item color at the end of the desc
+    drawCursor          : "rnd",	// Draw the cursor ("rnd" is random cursor position)
+    drawSockets         : true,		// Draw sockets and socketed items
+    drawEthereal        : true,		// Draw ethereal item gfx
 
     // ------ No touchy ------
 
     font:   (function () { WebFont.load({custom: {families: ['AvQuest']}}); return "AvQuest";   }).call(),
-    font16: [
-        Font16.loadFont(0)
-    ],
     
     hand:   (function () { let img = new Image(); img.src = "assets/hand.png";      return img; }).call(),
     socket: (function () { let img = new Image(); img.src = "assets/gemsocket.png"; return img; }).call(),
@@ -90,10 +88,9 @@ var itemScreenshot = {
         for (var line in lines) {
             out.push({ text: lines[line], color: [0] });
         }
-    
-        // Lines are normally in reverse. Add color tags if needed and reverse order.
+
         for (i = out.length - 1; i >= 0; i -= 1) {
-            if (out[i].text.indexOf("Sell value: ") > -1) { // Remove sell value
+            if (out[i].text.indexOf("Sell value: ") > -1) {
                 out.splice(i, 1);
     
                 i += 1;
@@ -102,9 +99,8 @@ var itemScreenshot = {
                     out[i].text = out[i].text.split(" (")[0];
                 }
 
-                // Remove all buggy color codes first ..
-                out[i].text = out[i].text.replace(/^((xff)|ÿc)/, "");
-				out[i].text = out[i].text.replace(/[0-9]((xff)|ÿc)/g, "");
+                out[i].text = out[i].text.replace(/^((xffc)|ÿc)/, "");
+				out[i].text = out[i].text.replace(/[0-9]((xffc)|ÿc)/g, "");
                 
                 // Check if one of the requirements is not met or if we decided to hide them
                 if (this.hideRequirements && out[i].text.match(/^1/) &&
@@ -122,17 +118,15 @@ var itemScreenshot = {
                 if (i > 3 && out[i].color[0] === 4) {
                     setCompletionInd = i;
                 }
-                
-                // Remove colorcode from desc
+
 				out[i].text = out[i].text.substring(1);
 				
 				// second color in same row will always be blue/'magic'
                 if (out[i].text.match(/((xff)|ÿc)/))
                     out[i].color.push(3);
             }
-    
-			// using '$' as delimiter for inline color change here..
-            out[i].text = out[i].text.replace(/((xff)|ÿc)([0-9!"+<;.*])/g, "\$");
+
+            out[i].text = out[i].text.replace(/((xffc)|ÿc)([0-9!"+<;.*])/g, "\$");
             out[i].text = out[i].text.replace(/\\/g, "");
         }
 
@@ -148,6 +142,7 @@ var itemScreenshot = {
     },
 
     drawScreenshot: function (item) {
+        var iStart = Date.now();
         var strArray1 = this.cleanDecription(item.description);
         var num1 = 0;
         var tmp = document.createElement('canvas');
@@ -155,14 +150,14 @@ var itemScreenshot = {
         ctx.font = "bold 1.5em AvQuest";
 		
         for (var line in strArray1) {
-            let size = Font16.measureText(strArray1[line].text);//ctx.measureText(strArray1[line].text);
+            let size = this.fastMode ? ctx.measureText(strArray1[line].text) : Font16.measureText(strArray1[line].text);
             if (size.width > num1) {
                 num1 = size.width;
             }
         }
 
         if (this.showItemColor && item.itemColor !== -1) {
-            strArray1.push({ text: "", color: ["#505050"]});
+            strArray1.push({ text: "", color: [5]});
             strArray1.push({ text: this.colorStrings[item.itemColor], color: [5]});
         }
         
@@ -209,14 +204,14 @@ var itemScreenshot = {
             document.getElementById("itemList").append(canvas);
             var graphics = canvas.getContext('2d');
             
-            console.log("Setting black canvas")
+            //console.log("Setting black canvas")
             graphics.fillStyle = "rgba(10, 10, 10, 1)";
             graphics.fillRect(0, 0, canvas.width, canvas.height);
             
-            console.log("Drawing background");
+            //console.log("Drawing background");
             graphics.drawImage(this.bgnd[Y-1], canvas.width / 2 - Left, -9); // top -10 originally
 
-            console.log("Drawing item-active background");
+            //console.log("Drawing item-active background");
             if (this.drawCursor) {
                 graphics.fillStyle = "rgba(0, 128, 0, 0.1)";
             } else {
@@ -224,7 +219,7 @@ var itemScreenshot = {
             }
             graphics.fillRect((canvas.width - image.width) / 2, 5, image.width, image.height);
             
-            console.log("Drawing item gfx")
+            //console.log("Drawing item gfx")
             if (this.drawEthereal && item.description.toLowerCase().indexOf("ethereal") > -1) graphics.globalAlpha = 0.5;
             graphics.drawImage(image, Math.round((canvas.width - image.width) / 2), 5);
             graphics.globalAlpha = 1.0;
@@ -412,54 +407,69 @@ var itemScreenshot = {
                 }
             }
 
-            console.log("Drawing text");
-            graphics.font = ctx.font;
-            graphics.filter = "blur(0.2px)";
-
-			var index = 0;
-            strArray1.forEach((line) => {
-				let pos = {
-					x: Math.round(canvas.width / 2),
-					y: (index * num2 + Top - 1.0) // -1 originally
-				};
-				
-                shift = Font16.measureText(line.text).width / 2
-				
-                if(line.color.length > 1) {
-					leftText = line.text.split("$")[0];
-					rightText = line.text.split("$")[1];
-					// Apply back half the wrong measured kerning for char '$' width 10 / 2 = 5
-                    Font16.drawText(graphics, pos.x - shift + 5, pos.y, leftText, line.color[0]);
-                    Font16.drawText(graphics, pos.x - shift + 5 + Font16.measureText(leftText).width, pos.y, rightText, line.color[1]);
-				} else {
-					Font16.drawText(graphics, pos.x - shift, pos.y, line.text, line.color[0]);
-				}
+            //console.log("Drawing text");
+            
+            if (this.fastMode) {
+				graphics.font = ctx.font;
+				graphics.filter = "blur(0.2px)";
                 
-				/* if(line.color.length > 1) {
-					leftText = line.text.split("$")[0];
-					rightText = line.text.split("$")[1];
-					graphics.textAlign = "left";
-					graphics.fillText(leftText, pos.x - shift, pos.y);
-					graphics.fillStyle = this.textColorMap[line.color[1]];
-					graphics.fillText(line.text.split("$")[1], pos.x + ctx.measureText(leftText).width - shift, pos.y);
-				} else {
-					graphics.textAlign = "center";
-					graphics.fillText(line.text, pos.x, pos.y);
-				} */
-				index += 1;
-                
-			});
+				for (var index in strArray1) {
+                    let pos = {
+                        x: canvas.width / 2,
+                        y: (index * num2 + Top + num2 - 3) // -1 originally
+                    };
+                    
+                    graphics.fillStyle = this.textColorMap[strArray1[index].color[0]];
+                    
+                    if(strArray1[index].color.length > 1) {
+                        leftText = strArray1[index].text.split("$")[0];
+                        rightText = strArray1[index].text.split("$")[1];
+                        shift = (ctx.measureText(leftText).width + ctx.measureText(rightText).width) / 2;
+                        graphics.textAlign = "left";
+                        graphics.fillText(leftText, Math.round(pos.x - shift), Math.round(pos.y));
+                        graphics.fillStyle = this.textColorMap[strArray1[index].color[1]];
+                        graphics.fillText(strArray1[index].text.split("$")[1], Math.round(pos.x + ctx.measureText(leftText).width - shift), Math.round(pos.y));
+                    } else {
+                        graphics.textAlign = "center";
+                        graphics.fillText(strArray1[index].text, Math.round(pos.x), Math.round(pos.y));
+                    }
+                }
+                graphics.filter = "None";
+            } else {
+                var index = 0;
+                strArray1.forEach((line) => {
+                    let pos = {
+                        x: canvas.width / 2,
+                        y: (index * num2 + Top - 1)
+                    };
+                    
+                    shift = Font16.measureText(line.text).width / 2;
+                    
+                    if(line.color.length > 1) {
+                        leftText = line.text.split("$")[0];
+                        rightText = line.text.split("$")[1];
+                        // Apply back half the wrong measured kerning for char '$' width 10 / 2 = 5
+                        Font16.drawText(graphics, pos.x - shift + 5, pos.y, leftText, line.color[0]);
+                        Font16.drawText(graphics, pos.x - shift + 5 + Font16.measureText(leftText).width, pos.y, rightText, line.color[1]);
+                    } else {
+                        Font16.drawText(graphics, pos.x - shift, pos.y, line.text, line.color[0]);
+                    }
+                    index += 1;
+                });
+            }
             
             if (this.drawCursor) {
-                console.log("Drawing cursor");
+                //console.log("Drawing cursor");
                 function rnd(min, max) {
                   return Math.floor(Math.random() * (max - min + 1) ) + min;
                 }
-                graphics.drawImage(itemScreenshot.hand, (canvas.width + image.width) / 2 - (this.drawCursor=="rnd"?rnd(2,15):5), 5 + (this.drawCursor=="rnd"?rnd(2,15):5));
+                graphics.drawImage(this.hand, (canvas.width + image.width) / 2 - (this.drawCursor=="rnd"?rnd(2,15):5), 5 + (this.drawCursor=="rnd"?rnd(2,15):5));
             }
-        }
-    },
 
+			console.log("Creating item screenshot took " + (Date.now() - iStart) + "ms");
+        }
+	},
+		
     drawCompilation: function (items) {
         var packer = new GrowingPacker();
         var blocks = [];
@@ -470,7 +480,7 @@ var itemScreenshot = {
         
         for (var idx in items) {
             // Todo: add load callback
-            itemScreenshot.drawScreenshot(items[idx]);
+           ItemScreenshot.drawScreenshot(items[idx]);
         }
         
         // Todo: remove timeout
@@ -500,7 +510,6 @@ var itemScreenshot = {
             $("#itemList").empty();
             $("#itemList").addClass("visible");
             document.getElementById("itemList").append(canvas);   
-        }, 1000);
-        
+        }, 100);
     }
 }
