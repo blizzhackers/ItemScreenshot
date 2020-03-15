@@ -160,7 +160,11 @@ var ItemScreenshot = {
             strArray1.push({ text: "", color: [5]});
             strArray1.push({ text: this.colorStrings[item.itemColor], color: [5]});
         }
+		
+		var test = new Item(Items["testItem4"]);
         
+		test.drawItem();
+		
         if (num1 < 100)
             num1 = 100;
             
