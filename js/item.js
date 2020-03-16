@@ -232,13 +232,18 @@ var BaseItem = new BaseItem();
 
 function Item(itemData) {	
 	this.image = itemData.image;
+	this.description = itemData.description;
+	this.title = itemData.title;
+	this.itemColor = itemData.itemColor;
+	this.header = itemData.header;
+	this.sockets = itemData.sockets;
 	this.X = 2;
 	this.Y = 4;
 	this.width = 0;
 	this.height = 0;
+	this.onload = () => {};
 	
-	this.color = itemData.itemColor;
-	this.ethereal = itemData.description.toLowerCase().indexOf("ethereal") > -1;
+	this.ethereal = this.description.toLowerCase().indexOf("ethereal") > -1;
 	this.socketPositions = [];
 
 	var loadImage = (() => {
@@ -246,7 +251,7 @@ function Item(itemData) {
             var iStart = Date.now();
             var image = new Image();
             
-            image.src = "assets/gfx/" + itemData.image + "/" + (itemData.itemColor === -1?21:itemData.itemColor) + ".png";
+            image.src = "assets/gfx/" + this.image + "/" + (this.itemColor === -1?21:this.itemColor) + ".png";
             
             image.onload = () => {
                 this.width = image.width;
@@ -276,152 +281,153 @@ function Item(itemData) {
                         
                 //this.socketPositions = [];
                 
-                switch (itemData.sockets.length) {
+                switch (this.sockets.length) {
                     case 1:
                         if(this.Y === 2) {
                             if(this.X === 1) {
-                                this.socketPositions.push({ gfx: itemData.sockets[0], x: num3 + num11, y: num6 + num10 + num12 });
+                                this.socketPositions.push({ gfx: this.sockets[0], x: num3 + num11, y: num6 + num10 + num12 });
                                 break;
                             }
-                            this.socketPositions.push({ gfx: itemData.sockets[0], x: num4 + num11, y: num6 + num10 + num12 });
+                            this.socketPositions.push({ gfx: this.sockets[0], x: num4 + num11, y: num6 + num10 + num12 });
                             break;
                         }
                         if (this.Y === 3) {
                             if (this.X === 1) {
-                                this.socketPositions.push({ gfx: itemData.sockets[0], x: num3 + num11, y: num7 + num12 });
+                                this.socketPositions.push({ gfx: this.sockets[0], x: num3 + num11, y: num7 + num12 });
                                 break;
                             }
-                            this.socketPositions.push({ gfx: itemData.sockets[0], x: num4 + num11, y: num7 + num12 });
+                            this.socketPositions.push({ gfx: this.sockets[0], x: num4 + num11, y: num7 + num12 });
                             break;
                         }
                         if (this.X === 1) {
-                            this.socketPositions.push({ gfx: itemData.sockets[0], x: num3 + num11, y: num7 + num10 + num12 });
+                            this.socketPositions.push({ gfx: this.sockets[0], x: num3 + num11, y: num7 + num10 + num12 });
                             break;
                         }
-                        this.socketPositions.push({ gfx: itemData.sockets[0], x: num4 + num11, y: num7 + num10 + num12 });
+                        this.socketPositions.push({ gfx: this.sockets[0], x: num4 + num11, y: num7 + num10 + num12 });
                         break;
                     case 2:
                         if(this.Y === 2) {
                             if(this.X === 1) {
-                                this.socketPositions.push({ gfx: itemData.sockets[0], x: num3 + num11, y: num6 + num12});
-                                this.socketPositions.push({ gfx: itemData.sockets[1], x: num3 + num11, y: num7 + num12});
+                                this.socketPositions.push({ gfx: this.sockets[0], x: num3 + num11, y: num6 + num12});
+                                this.socketPositions.push({ gfx: this.sockets[1], x: num3 + num11, y: num7 + num12});
                                 break;
                             }
-                            this.socketPositions.push({ gfx: itemData.sockets[0], x: num4 + num11, y: num6 + num12});
-                            this.socketPositions.push({ gfx: itemData.sockets[1], x: num4 + num11, y: num7 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[0], x: num4 + num11, y: num6 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[1], x: num4 + num11, y: num7 + num12});
                             break;
                         }
                         if (this.Y === 3) {
                             if (this.X === 1) {
-                                this.socketPositions.push({ gfx: itemData.sockets[0], x: num3 + num11, y: num6 + num10 + num12});
-                                this.socketPositions.push({ gfx: itemData.sockets[1], x: num3 + num11, y: num7 + num10 + num12});
+                                this.socketPositions.push({ gfx: this.sockets[0], x: num3 + num11, y: num6 + num10 + num12});
+                                this.socketPositions.push({ gfx: this.sockets[1], x: num3 + num11, y: num7 + num10 + num12});
                                 break;
                             }
-                            this.socketPositions.push({ gfx: itemData.sockets[0], x: num4 + num11, y: num6 + num10 + num12});
-                            this.socketPositions.push({ gfx: itemData.sockets[1], x: num4 + num11, y: num7 + num10 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[0], x: num4 + num11, y: num6 + num10 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[1], x: num4 + num11, y: num7 + num10 + num12});
                             break;
                         }
                         if (this.X === 1) {
-                            this.socketPositions.push({ gfx: itemData.sockets[0], x: num3 + num11, y: num6 + num10 + num12});
-                            this.socketPositions.push({ gfx: itemData.sockets[1], x: num3 + num11, y: num8 + num10 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[0], x: num3 + num11, y: num6 + num10 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[1], x: num3 + num11, y: num8 + num10 + num12});
                             break;
                         }
-                        this.socketPositions.push({ gfx: itemData.sockets[0], x: num4 + num11, y: num6 + num10 + num12});
-                        this.socketPositions.push({ gfx: itemData.sockets[1], x: num4 + num11, y: num8 + num10 + num12});
+                        this.socketPositions.push({ gfx: this.sockets[0], x: num4 + num11, y: num6 + num10 + num12});
+                        this.socketPositions.push({ gfx: this.sockets[1], x: num4 + num11, y: num8 + num10 + num12});
                         break;
                     case 3:
                         if(this.Y === 2) {
-                            this.socketPositions.push({ gfx: itemData.sockets[0], x: num3 + num11, y: num6 + num12});
-                            this.socketPositions.push({ gfx: itemData.sockets[1], x: num5 + num11, y: num6 + num12});
-                            this.socketPositions.push({ gfx: itemData.sockets[2], x: num4 + num11, y: num7 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[0], x: num3 + num11, y: num6 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[1], x: num5 + num11, y: num6 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[2], x: num4 + num11, y: num7 + num12});
                             break;
                         }
                         if (this.Y === 3) {
                             if (this.X === 1) {
-                                this.socketPositions.push({ gfx: itemData.sockets[0], x: num3 + num11, y: num6 + num12});
-                                this.socketPositions.push({ gfx: itemData.sockets[1], x: num3 + num11, y: num7 + num12});
-                                this.socketPositions.push({ gfx: itemData.sockets[2], x: num3 + num11, y: num8 + num12});
+                                this.socketPositions.push({ gfx: this.sockets[0], x: num3 + num11, y: num6 + num12});
+                                this.socketPositions.push({ gfx: this.sockets[1], x: num3 + num11, y: num7 + num12});
+                                this.socketPositions.push({ gfx: this.sockets[2], x: num3 + num11, y: num8 + num12});
                                 break;
                             }
-                            this.socketPositions.push({ gfx: itemData.sockets[0], x: num4 + num11, y: num6 + num12});
-                            this.socketPositions.push({ gfx: itemData.sockets[1], x: num4 + num11, y: num7 + num12});
-                            this.socketPositions.push({ gfx: itemData.sockets[2], x: num4 + num11, y: num8 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[0], x: num4 + num11, y: num6 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[1], x: num4 + num11, y: num7 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[2], x: num4 + num11, y: num8 + num12});
                             break;
                         }
                         if (this.X === 1) {
-                            this.socketPositions.push({ gfx: itemData.sockets[0], x: num3 + num11, y: num6 + num10 + num12});
-                            this.socketPositions.push({ gfx: itemData.sockets[1], x: num3 + num11, y: num7 + num10 + num12});
-                            this.socketPositions.push({ gfx: itemData.sockets[2], x: num3 + num11, y: num8 + num10 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[0], x: num3 + num11, y: num6 + num10 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[1], x: num3 + num11, y: num7 + num10 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[2], x: num3 + num11, y: num8 + num10 + num12});
                             break;
                         }
-                        this.socketPositions.push({ gfx: itemData.sockets[0], x: num4 + num11, y: num6 + num10 + num12});
-                        this.socketPositions.push({ gfx: itemData.sockets[1], x: num4 + num11, y: num7 + num10 + num12});
-                        this.socketPositions.push({ gfx: itemData.sockets[2], x: num4 + num11, y: num8 + num10 + num12});
+                        this.socketPositions.push({ gfx: this.sockets[0], x: num4 + num11, y: num6 + num10 + num12});
+                        this.socketPositions.push({ gfx: this.sockets[1], x: num4 + num11, y: num7 + num10 + num12});
+                        this.socketPositions.push({ gfx: this.sockets[2], x: num4 + num11, y: num8 + num10 + num12});
                         break;
                     case 4:
                         if (this.Y === 3) {
-                            this.socketPositions.push({ gfx: itemData.sockets[0], x: num3 + num11, y: num6 + num10 + num12});
-                            this.socketPositions.push({ gfx: itemData.sockets[1], x: num5 + num11, y: num6 + num10 + num12});
-                            this.socketPositions.push({ gfx: itemData.sockets[2], x: num3 + num11, y: num7 + num10 + num12});
-                            this.socketPositions.push({ gfx: itemData.sockets[3], x: num5 + num11, y: num7 + num10 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[0], x: num3 + num11, y: num6 + num10 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[1], x: num5 + num11, y: num6 + num10 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[2], x: num3 + num11, y: num7 + num10 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[3], x: num5 + num11, y: num7 + num10 + num12});
                             break;
                         }
                         if (this.Y === 2) {
-                            this.socketPositions.push({ gfx: itemData.sockets[0], x: num3 + num11, y: num6 + num12});
-                            this.socketPositions.push({ gfx: itemData.sockets[1], x: num5 + num11, y: num6 + num12});
-                            this.socketPositions.push({ gfx: itemData.sockets[2], x: num3 + num11, y: num7 + num12});
-                            this.socketPositions.push({ gfx: itemData.sockets[3], x: num5 + num11, y: num7 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[0], x: num3 + num11, y: num6 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[1], x: num5 + num11, y: num6 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[2], x: num3 + num11, y: num7 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[3], x: num5 + num11, y: num7 + num12});
                             break;
                         }
                         if(this.X === 1) {
-                            this.socketPositions.push({ gfx: itemData.sockets[0], x: num3 + num11, y: num6 + num12});
-                            this.socketPositions.push({ gfx: itemData.sockets[1], x: num3 + num11, y: num7 + num12});
-                            this.socketPositions.push({ gfx: itemData.sockets[2], x: num3 + num11, y: num8 + num12});
-                            this.socketPositions.push({ gfx: itemData.sockets[3], x: num3 + num11, y: num9 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[0], x: num3 + num11, y: num6 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[1], x: num3 + num11, y: num7 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[2], x: num3 + num11, y: num8 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[3], x: num3 + num11, y: num9 + num12});
                             break;
                         }
-                        this.socketPositions.push({ gfx: itemData.sockets[0], x: num4 + num11, y: num6 + num12});
-                        this.socketPositions.push({ gfx: itemData.sockets[1], x: num4 + num11, y: num7 + num12});
-                        this.socketPositions.push({ gfx: itemData.sockets[2], x: num4 + num11, y: num8 + num12});
-                        this.socketPositions.push({ gfx: itemData.sockets[3], x: num4 + num11, y: num9 + num12});
+                        this.socketPositions.push({ gfx: this.sockets[0], x: num4 + num11, y: num6 + num12});
+                        this.socketPositions.push({ gfx: this.sockets[1], x: num4 + num11, y: num7 + num12});
+                        this.socketPositions.push({ gfx: this.sockets[2], x: num4 + num11, y: num8 + num12});
+                        this.socketPositions.push({ gfx: this.sockets[3], x: num4 + num11, y: num9 + num12});
                         break;
                     case 5:
                         if (this.Y === 3) {
-                            this.socketPositions.push({ gfx: itemData.sockets[0], x: num3 + num11, y: num6 + num12});
-                            this.socketPositions.push({ gfx: itemData.sockets[1], x: num5 + num11, y: num6 + num12});
-                            this.socketPositions.push({ gfx: itemData.sockets[2], x: num4 + num11, y: num7 + num12});
-                            this.socketPositions.push({ gfx: itemData.sockets[3], x: num3 + num11, y: num8 + num12});
-                            this.socketPositions.push({ gfx: itemData.sockets[4], x: num5 + num11, y: num8 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[0], x: num3 + num11, y: num6 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[1], x: num5 + num11, y: num6 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[2], x: num4 + num11, y: num7 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[3], x: num3 + num11, y: num8 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[4], x: num5 + num11, y: num8 + num12});
                             break;
                         }
-                        this.socketPositions.push({ gfx: itemData.sockets[0], x: num3 + num11, y: num6 + num10 + num12});
-                        this.socketPositions.push({ gfx: itemData.sockets[1], x: num5 + num11, y: num6 + num10 + num12});
-                        this.socketPositions.push({ gfx: itemData.sockets[2], x: num4 + num11, y: num7 + num10 + num12});
-                        this.socketPositions.push({ gfx: itemData.sockets[3], x: num3 + num11, y: num8 + num10 + num12});
-                        this.socketPositions.push({ gfx: itemData.sockets[4], x: num5 + num11, y: num8 + num10 + num12});
+                        this.socketPositions.push({ gfx: this.sockets[0], x: num3 + num11, y: num6 + num10 + num12});
+                        this.socketPositions.push({ gfx: this.sockets[1], x: num5 + num11, y: num6 + num10 + num12});
+                        this.socketPositions.push({ gfx: this.sockets[2], x: num4 + num11, y: num7 + num10 + num12});
+                        this.socketPositions.push({ gfx: this.sockets[3], x: num3 + num11, y: num8 + num10 + num12});
+                        this.socketPositions.push({ gfx: this.sockets[4], x: num5 + num11, y: num8 + num10 + num12});
                         break;
                     case 6:
                         if (this.Y === 3) {
-                            this.socketPositions.push({ gfx: itemData.sockets[0], x: num3 + num11, y: num6 + num12});
-                            this.socketPositions.push({ gfx: itemData.sockets[1], x: num5 + num11, y: num6 + num12});
-                            this.socketPositions.push({ gfx: itemData.sockets[2], x: num3 + num11, y: num7 + num12});
-                            this.socketPositions.push({ gfx: itemData.sockets[3], x: num5 + num11, y: num7 + num12});
-                            this.socketPositions.push({ gfx: itemData.sockets[4], x: num3 + num11, y: num8 + num12});
-                            this.socketPositions.push({ gfx: itemData.sockets[5], x: num5 + num11, y: num8 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[0], x: num3 + num11, y: num6 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[1], x: num5 + num11, y: num6 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[2], x: num3 + num11, y: num7 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[3], x: num5 + num11, y: num7 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[4], x: num3 + num11, y: num8 + num12});
+                            this.socketPositions.push({ gfx: this.sockets[5], x: num5 + num11, y: num8 + num12});
                             break;
                         }
-                        this.socketPositions.push({ gfx: itemData.sockets[0], x: num3 + num11, y: num6 + num10 + num12});
-                        this.socketPositions.push({ gfx: itemData.sockets[1], x: num5 + num11, y: num6 + num10 + num12});
-                        this.socketPositions.push({ gfx: itemData.sockets[2], x: num3 + num11, y: num7 + num10 + num12});
-                        this.socketPositions.push({ gfx: itemData.sockets[3], x: num5 + num11, y: num7 + num10 + num12});
-                        this.socketPositions.push({ gfx: itemData.sockets[4], x: num3 + num11, y: num8 + num10 + num12});
-                        this.socketPositions.push({ gfx: itemData.sockets[5], x: num5 + num11, y: num8 + num10 + num12});
+                        this.socketPositions.push({ gfx: this.sockets[0], x: num3 + num11, y: num6 + num10 + num12});
+                        this.socketPositions.push({ gfx: this.sockets[1], x: num5 + num11, y: num6 + num10 + num12});
+                        this.socketPositions.push({ gfx: this.sockets[2], x: num3 + num11, y: num7 + num10 + num12});
+                        this.socketPositions.push({ gfx: this.sockets[3], x: num5 + num11, y: num7 + num10 + num12});
+                        this.socketPositions.push({ gfx: this.sockets[4], x: num3 + num11, y: num8 + num10 + num12});
+                        this.socketPositions.push({ gfx: this.sockets[5], x: num5 + num11, y: num8 + num10 + num12});
                         break;
                     default:
                         break;
                 }
             
                 console.log("Loading item took " + (Date.now() - iStart) + "ms");
+				this.onload(image);
                 resolve(image);
             }
         });

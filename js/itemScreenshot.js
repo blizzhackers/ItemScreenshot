@@ -161,42 +161,29 @@ var ItemScreenshot = {
             strArray1.push({ text: this.colorStrings[item.itemColor], color: [5]});
         }
 		
-		var test = new Item(Items["testItem3"]);
+		var test = new Item(item);
 		
         if (num1 < 100)
             num1 = 100;
             
         num2 = 16;
-        
-        if (item.itemColor === -1) {
-            item.itemColor = 21;
-        }
 
-        var image = new Image();
-        image.src = "assets/gfx/" + item.image + "/" + item.itemColor + ".png";
-        
-        image.onload = () => {
+        item.onload = () => {
             var X, Y, Top, Left = 0
         
-            if (image.height < 30) {
-                Y = 1;
+            if (item.X === 1) {
                 Top = 32;
-            } else if (image.height < 65) {
-                Y = 2;
+            } else if (item.X === 2) {
                 Top = 61;
-            } else if (image.height < 95) {
-                Y = 3;
+            } else if (item.X === 3) {
                 Top = 90;
             } else {
-                Y = 4;
                 Top = 119;
             }
             
-            if (image.width < 37) {
-                X = 1;
+            if (item.Y === 1) {
                 Left = 213; // 212 originally
             } else {
-                X = 2;
                 Left = 226;
             }
             
@@ -211,7 +198,7 @@ var ItemScreenshot = {
             graphics.fillRect(0, 0, canvas.width, canvas.height);
             
             //console.log("Drawing background");
-            graphics.drawImage(this.bgnd[Y-1], canvas.width / 2 - Left, -9); // top -10 originally
+            graphics.drawImage(this.bgnd[item.Y-1], canvas.width / 2 - Left, -9); // top -10 originally
 
             //console.log("Drawing item-active background");
             if (this.drawCursor) {
@@ -219,195 +206,11 @@ var ItemScreenshot = {
             } else {
                 graphics.fillStyle = "rgba(0, 0, 255, 0.1)";
             }
-            graphics.fillRect((canvas.width - image.width) / 2, 5, image.width, image.height);
+            graphics.fillRect((canvas.width - item.width) / 2, 5, item.width, item.height);
             
             //console.log("Drawing item gfx")
-            if (this.drawEthereal && item.description.toLowerCase().indexOf("ethereal") > -1) graphics.globalAlpha = 0.5;
-            graphics.drawImage(image, Math.round((canvas.width - image.width) / 2), 5);
-            graphics.globalAlpha = 1.0;
+			item.drawItem(graphics, Math.round((canvas.width - item.width) / 2), 5);
             
-            if (this.drawSockets) {
-                let num3 = Math.round((canvas.width - image.width) / 2);
-                let num4 = num3 + 14;
-                let num5 = num4 + 14;
-                let num6 = 5;
-                let num7 = 34;
-                let num8 = 63;
-                let num9 = 92;
-                let num10 = 14;
-                let num11 = 1;
-                let num12 = -1;
-                
-                let socketPositions = [];
-                
-                switch (item.sockets.length) {
-                case 1:
-                    if(Y === 2) {
-                        if(X === 1) {
-                            socketPositions.push({ x: num3 + num11, y: num6 + num10 + num12});
-                            break;
-                        }
-                        socketPositions.push({ x: num4 + num11, y: num6 + num10 + num12});
-                        break;
-                    }
-                    if (Y === 3) {
-                        if (X === 1) {
-                            socketPositions.push({ x: num3 + num11, y: num7 + num12});
-                            break;
-                        }
-                        socketPositions.push({ x: num4 + num11, y: num7 + num12});
-                        break;
-                    }
-                    if (X === 1) {
-                        socketPositions.push({ x: num3 + num11, y: num7 + num10 + num12});
-                        break;
-                    }
-                    socketPositions.push({ x: num4 + num11, y: num7 + num10 + num12});
-                    break;
-                case 2:
-                    if(Y === 2) {
-                        if(X === 1) {
-                            socketPositions.push({ x: num3 + num11, y: num6 + num12});
-                            socketPositions.push({ x: num3 + num11, y: num7 + num12});
-                            break;
-                        }
-                        socketPositions.push({ x: num4 + num11, y: num6 + num12});
-                        socketPositions.push({ x: num4 + num11, y: num7 + num12});
-                        break;
-                    }
-                    if (Y === 3) {
-                        if (X === 1) {
-                            socketPositions.push({ x: num3 + num11, y: num6 + num10 + num12});
-                            socketPositions.push({ x: num3 + num11, y: num7 + num10 + num12});
-                            break;
-                        }
-                        socketPositions.push({ x: num4 + num11, y: num6 + num10 + num12});
-                        socketPositions.push({ x: num4 + num11, y: num7 + num10 + num12});
-                        break;
-                    }
-                    if (X === 1) {
-                        socketPositions.push({ x: num3 + num11, y: num6 + num10 + num12});
-                        socketPositions.push({ x: num3 + num11, y: num8 + num10 + num12});
-                        break;
-                    }
-                    socketPositions.push({ x: num4 + num11, y: num6 + num10 + num12});
-                    socketPositions.push({ x: num4 + num11, y: num8 + num10 + num12});
-                    break;
-                case 3:
-                    if(Y === 2) {
-                        socketPositions.push({ x: num3 + num11, y: num6 + num12});
-                        socketPositions.push({ x: num5 + num11, y: num6 + num12});
-                        socketPositions.push({ x: num4 + num11, y: num7 + num12});
-                        break;
-                    }
-                    if (Y === 3) {
-                        if (X === 1) {
-                            socketPositions.push({ x: num3 + num11, y: num6 + num12});
-                            socketPositions.push({ x: num3 + num11, y: num7 + num12});
-                            socketPositions.push({ x: num3 + num11, y: num8 + num12});
-                            break;
-                        }
-                        socketPositions.push({ x: num4 + num11, y: num6 + num12});
-                        socketPositions.push({ x: num4 + num11, y: num7 + num12});
-                        socketPositions.push({ x: num4 + num11, y: num8 + num12});
-                        break;
-                    }
-                    if (X === 1) {
-                        socketPositions.push({ x: num3 + num11, y: num6 + num10 + num12});
-                        socketPositions.push({ x: num3 + num11, y: num7 + num10 + num12});
-                        socketPositions.push({ x: num3 + num11, y: num8 + num10 + num12});
-                        break;
-                    }
-                    socketPositions.push({ x: num4 + num11, y: num6 + num10 + num12});
-                    socketPositions.push({ x: num4 + num11, y: num7 + num10 + num12});
-                    socketPositions.push({ x: num4 + num11, y: num8 + num10 + num12});
-                    break;
-                case 4:
-                    if (Y === 3) {
-                        socketPositions.push({ x: num3 + num11, y: num6 + num10 + num12});
-                        socketPositions.push({ x: num5 + num11, y: num6 + num10 + num12});
-                        socketPositions.push({ x: num3 + num11, y: num7 + num10 + num12});
-                        socketPositions.push({ x: num5 + num11, y: num7 + num10 + num12});
-                        break;
-                    }
-                    if (Y === 2) {
-                        socketPositions.push({ x: num3 + num11, y: num6 + num12});
-                        socketPositions.push({ x: num5 + num11, y: num6 + num12});
-                        socketPositions.push({ x: num3 + num11, y: num7 + num12});
-                        socketPositions.push({ x: num5 + num11, y: num7 + num12});
-                        break;
-                    }
-                    if(X === 1) {
-                        socketPositions.push({ x: num3 + num11, y: num6 + num12});
-                        socketPositions.push({ x: num3 + num11, y: num7 + num12});
-                        socketPositions.push({ x: num3 + num11, y: num8 + num12});
-                        socketPositions.push({ x: num3 + num11, y: num9 + num12});
-                        break;
-                    }
-                    socketPositions.push({ x: num4 + num11, y: num6 + num12});
-                    socketPositions.push({ x: num4 + num11, y: num7 + num12});
-                    socketPositions.push({ x: num4 + num11, y: num8 + num12});
-                    socketPositions.push({ x: num4 + num11, y: num9 + num12});
-                    break;
-                case 5:
-                    if (Y === 3) {
-                        socketPositions.push({ x: num3 + num11, y: num6 + num12});
-                        socketPositions.push({ x: num5 + num11, y: num6 + num12});
-                        socketPositions.push({ x: num4 + num11, y: num7 + num12});
-                        socketPositions.push({ x: num3 + num11, y: num8 + num12});
-                        socketPositions.push({ x: num5 + num11, y: num8 + num12});
-                        break;
-                    }
-                    socketPositions.push({ x: num3 + num11, y: num6 + num10 + num12});
-                    socketPositions.push({ x: num5 + num11, y: num6 + num10 + num12});
-                    socketPositions.push({ x: num4 + num11, y: num7 + num10 + num12});
-                    socketPositions.push({ x: num3 + num11, y: num8 + num10 + num12});
-                    socketPositions.push({ x: num5 + num11, y: num8 + num10 + num12});
-                    break;
-                case 6:
-                    if (Y === 3) {
-                        socketPositions.push({ x: num3 + num11, y: num6 + num12});
-                        socketPositions.push({ x: num5 + num11, y: num6 + num12});
-                        socketPositions.push({ x: num3 + num11, y: num7 + num12});
-                        socketPositions.push({ x: num5 + num11, y: num7 + num12});
-                        socketPositions.push({ x: num3 + num11, y: num8 + num12});
-                        socketPositions.push({ x: num5 + num11, y: num8 + num12});
-                        break;
-                    }
-                    socketPositions.push({ x: num3 + num11, y: num6 + num10 + num12});
-                    socketPositions.push({ x: num5 + num11, y: num6 + num10 + num12});
-                    socketPositions.push({ x: num3 + num11, y: num7 + num10 + num12});
-                    socketPositions.push({ x: num5 + num11, y: num7 + num10 + num12});
-                    socketPositions.push({ x: num3 + num11, y: num8 + num10 + num12});
-                    socketPositions.push({ x: num5 + num11, y: num8 + num10 + num12});
-                    break;
-                default:
-                    break;
-                }
-
-                for (var i = 0; i < item.sockets.length && socketPositions.length; i++) {
-                    graphics.globalAlpha = 0.3;
-                    graphics.drawImage(
-                        this.socket,
-                        socketPositions[i].x - 2,
-                        socketPositions[i].y + 1
-                    );
-                    graphics.globalAlpha = 1.0;
-
-                    if (item.sockets[i] === "gemsocket") continue;
-                    var img = new Image();
-                    img.src = "assets/gfx/" + item.sockets[i] + "/21.png";
-                    img.onload = (function(pos) {
-                        return function() {
-                            graphics.drawImage(
-                                this,  // Socketed item
-                                pos.x, // X
-                                pos.y  // Y
-                            );
-                        };
-                    })(socketPositions[i]);
-                }
-            }
 
             //console.log("Drawing text");
             
@@ -465,12 +268,8 @@ var ItemScreenshot = {
                 function rnd(min, max) {
                   return Math.floor(Math.random() * (max - min + 1) ) + min;
                 }
-                graphics.drawImage(this.hand, (canvas.width + image.width) / 2 - (this.drawCursor=="rnd"?rnd(2,15):5), 5 + (this.drawCursor=="rnd"?rnd(2,15):5));
+                graphics.drawImage(this.hand, (canvas.width + item.width) / 2 - (this.drawCursor=="rnd"?rnd(2,15):5), 5 + (this.drawCursor=="rnd"?rnd(2,15):5));
             }
-			
-			
-        
-			test.drawItem(graphics, 0, 0);
 
 			console.log("Creating item screenshot took " + (Date.now() - iStart) + "ms");
         }
@@ -486,7 +285,7 @@ var ItemScreenshot = {
         
         for (var idx in items) {
             // Todo: add load callback
-           ItemScreenshot.drawScreenshot(items[idx]);
+           ItemScreenshot.drawScreenshot(new Item(items[idx]));
         }
         
         // Todo: remove timeout
