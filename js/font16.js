@@ -2,32 +2,32 @@ function Font16() {
     var kerning = [10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 8, 10, 8, 10, 7, 10, 8, 10, 8, 10, 13, 10, 12, 10, 4, 10, 5, 10, 5, 10, 6, 10, 8, 10, 5, 10, 5, 10, 5, 10, 9, 10, 12, 10, 5, 10, 9, 10, 8, 10, 9, 10, 9, 10, 8, 10, 8, 10, 7, 10, 8, 10, 5, 10, 5, 10, 6, 10, 7, 10, 6, 10, 8, 10, 11, 10, 12, 10, 7, 10, 9, 10, 10, 10, 8, 10, 8, 10, 10, 10, 9, 10, 5, 10, 5, 10, 9, 10, 8, 10, 12, 10, 10, 10, 11, 10, 9, 10, 12, 10, 10, 10, 7, 10, 11, 10, 12, 10, 13, 10, 16, 10, 12, 10, 12, 10, 10, 10, 5, 10, 9, 10, 5, 10, 5, 10, 9, 10, 5, 10, 10, 10, 7, 10, 8, 10, 8, 10, 7, 10, 7, 10, 9, 10, 7, 10, 4, 10, 4, 10, 8, 10, 7, 10, 10, 10, 9, 10, 10, 10, 7, 10, 10, 10, 9, 10, 7, 10, 9, 10, 10, 10, 10, 10, 13, 10, 10, 10, 10, 10, 7, 10, 6, 10, 3, 10, 6, 10, 6, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 5, 10, 6, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 8, 10, 8, 10, 7, 10, 8, 10, 7, 10, 12, 10, 3, 10, 6, 10, 6, 10, 11, 10, 9, 10, 7, 10, 10, 10, 4, 10, 11, 10, 9, 10, 7, 10, 9, 10, 7, 10, 7, 10, 5, 10, 13, 10, 9, 10, 7, 10, 7, 10, 3, 10, 8, 10, 8, 10, 11, 10, 13, 10, 12, 10, 8, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 10, 11, 10, 10, 10, 8, 10, 7, 10, 8, 10, 8, 10, 5, 10, 5, 10, 5, 10, 7, 10, 11, 10, 11, 10, 11, 10, 11, 10, 11, 10, 12, 10, 11, 10, 10, 10, 11, 10, 13, 10, 13, 10, 13, 10, 12, 10, 12, 10, 8, 10, 9, 10, 11, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 8, 10, 7, 10, 6, 10, 7, 10, 7, 10, 4, 10, 5, 10, 4, 10, 5, 10, 8, 10, 9, 10, 10, 10, 9, 10, 9, 10, 10, 10, 10, 10, 8, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 7, 10, 10];
     
     var font = new Promise((resolve, reject) => {
-			var cStart = Date.now();
-			var img = new Image();
-			img.src = "assets/font16.png";
+        var cStart = Date.now();
+        var img = new Image();
+        img.src = "assets/font16.png";
 
-			img.onload = () => {
-				var fonts = [];
-				var cWidth = 14;
-				var cHeight = 16;
-				
-				for (var color = 0; color < 14; color++) {
-					fonts[color] = [];
-					
-					for (var ch = 0; ch < 256; ch++) {
-						let newChar = document.createElement('canvas');
-						newChar.width = cWidth;
-						newChar.height = cHeight;
-						let ctx = newChar.getContext('2d');
-						ctx.drawImage(img, ch * cWidth, (color > 0 ? color + 1 : 0) * cHeight, cWidth, cHeight, 0, 0, newChar.width, newChar.height);
-						fonts[color].push(newChar);
-					}
-				}
-				
-				console.log("Loading font took " + (Date.now() - cStart) + "ms");
-				resolve(fonts);
-			};
-		}).then(result => font = result);
+        img.onload = () => {
+            var fonts = [];
+            var cWidth = 14;
+            var cHeight = 16;
+            
+            for (var color = 0; color < 14; color++) {
+                fonts[color] = [];
+                
+                for (var ch = 0; ch < 256; ch++) {
+                    let newChar = document.createElement('canvas');
+                    newChar.width = cWidth;
+                    newChar.height = cHeight;
+                    let ctx = newChar.getContext('2d');
+                    ctx.drawImage(img, ch * cWidth, (color > 0 ? color + 1 : 0) * cHeight, cWidth, cHeight, 0, 0, newChar.width, newChar.height);
+                    fonts[color].push(newChar);
+                }
+            }
+            
+            console.log("Loading font took " + (Date.now() - cStart) + "ms");
+            resolve(fonts);
+        };
+	}).then(result => font = result);
 
     this.measureText = function(text) {
         var lines = Array.isArray(text) ? text : text.split("\n");
