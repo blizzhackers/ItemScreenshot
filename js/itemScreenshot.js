@@ -161,9 +161,7 @@ var ItemScreenshot = {
             strArray1.push({ text: this.colorStrings[item.itemColor], color: [5]});
         }
 		
-		var test = new Item(Items["testItem4"]);
-        
-		test.drawItem();
+		var test = new Item(Items["testItem3"]);
 		
         if (num1 < 100)
             num1 = 100;
@@ -469,6 +467,10 @@ var ItemScreenshot = {
                 }
                 graphics.drawImage(this.hand, (canvas.width + image.width) / 2 - (this.drawCursor=="rnd"?rnd(2,15):5), 5 + (this.drawCursor=="rnd"?rnd(2,15):5));
             }
+			
+			
+        
+			test.drawItem(graphics, 0, 0);
 
 			console.log("Creating item screenshot took " + (Date.now() - iStart) + "ms");
         }
