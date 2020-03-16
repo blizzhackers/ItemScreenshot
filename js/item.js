@@ -1,5 +1,5 @@
 function BaseItem() {
-    var runes_gen = function() { // generates runes compilation
+/*     var runes_gen = function() { // generates runes compilation, only needed to generate a new compilation .png
         var sWidth = 28;
         var sHeight = 28;
         let runes = []
@@ -22,9 +22,9 @@ function BaseItem() {
         }
         
         return runes;
-    };
+    }; */
     
-    var runes = function() {
+    var runes = function() { // slices compilation to rune list
         var img = new Image();
         img.src = "assets/runes.png";
         let runes = [];
@@ -56,7 +56,7 @@ function BaseItem() {
         return runes;
     };
     
-    var gems_gen = function() { // generates gems compilation
+    /* var gems_gen = function() { // generates gems compilation, only needed to generate a new compilation .png
         var gemlist = [
                 "skc", "skf", "sku", "skl", "skz",
                 "gsba", "gsbb", "gsbc", "gsbd", "gsbe",
@@ -88,9 +88,9 @@ function BaseItem() {
         }
         
         return gems;
-    };
+    }; */
     
-    var gems = function() {
+    var gems = function() { // slices compilation to gem list
         var img = new Image();
         img.src = "assets/gems.png";
         let gems = [];
@@ -112,7 +112,7 @@ function BaseItem() {
         ];
 
         for (let i = 0; i < gemlist.length; i++) {
-            let name = "r" + (i+1).toString().padStart(2, "0");
+            let name = gemlist[i];
             gems.push(new Promise((resolve, reject) => {
                 cb.push(() => {
                     var sWidth = 28;
@@ -132,7 +132,7 @@ function BaseItem() {
         return gems;
     };
     
-    var jewels_gen = function() { // generates jewels compilation
+    /* var jewels_gen = function() { // generates jewels compilation, only needed to generate a new compilation .png
         var sWidth = 28;
         var sHeight = 28;
         let jewels = []
@@ -155,6 +155,38 @@ function BaseItem() {
         }
         
         return jewels;
+    }; */
+	
+	var jewels = function() { // slices compilation to jewel list
+        var img = new Image();
+        img.src = "assets/jewels.png";
+        let jewels = [];
+        this.loaded = false;
+        
+        let cb = [];
+        img.onload = () => {
+            cb.forEach(cb => cb.call());
+        }
+
+        for (let i = 0; i < 6; i++) {
+            let name = "jew" + (i+1).toString();
+            jewels.push(new Promise((resolve, reject) => {
+                cb.push(() => {
+                    var sWidth = 28;
+                    var sHeight = 28;
+                    let newJewel = document.createElement('canvas');
+                    newJewel.width = sWidth;
+                    newJewel.height = sWidth;
+                    let ctx = newJewel.getContext('2d');
+                    ctx.drawImage(img, i * sWidth, 0, sWidth, sHeight, 0, 0, newJewel.width, newJewel.height);
+                    obj = {};
+                    obj[name] = newJewel;
+                    resolve(obj);
+                });
+            }));
+        }       
+        
+        return jewels;
     };
     
     this.socket = new Promise((resolve, reject) => {
@@ -162,7 +194,7 @@ function BaseItem() {
         var sWidth = 28;
         var sHeight = 28;
         let name = "gemsocket";
-        promises = [
+        let promises = [
             new Promise((resolve, reject) => {
                 let img = new Image();
                 img.src = "assets/" + name + ".png";
@@ -180,16 +212,14 @@ function BaseItem() {
         ];
         
         promises = promises.concat(runes());    // Add runes
-        //promises = promises.concat(jewels());     // Add jewels
         promises = promises.concat(gems());     // Add gems
-        
-        console.log(promises);
-        
+        promises = promises.concat(jewels());     // Add jewels
+		
         return Promise.all(promises).then(results => {
             let ret = {};
             results.forEach(result => {
-                Object.keys(result).forEach(rune => {
-                    ret[rune] = result[rune]
+                Object.keys(result).forEach(item => {
+                    ret[item] = result[item]
                 });
             });
             console.log("Loading sockets took " + (Date.now() - sStart) + "ms");

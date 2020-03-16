@@ -520,15 +520,13 @@ var ItemScreenshot = {
             var can = document.createElement('canvas');
             can.width = 0;
             can.height = 0;
-            can.width = (Object.keys(BaseItem.socket).length - 1) * 28;
+            can.width = Object.keys(BaseItem.socket).length * 28;
             can.height = 28;
             var ctx = can.getContext('2d');
             let i = 0;
             Object.keys(BaseItem.socket).forEach(socket => {
-                if(socket != "gemsocket") {
-                    ctx.drawImage(BaseItem.socket[socket], 28 * i, 0);
-                    i++;
-                }
+				ctx.drawImage(BaseItem.socket[socket], 28 * i, 0);
+				i++;
             });
             document.getElementById("itemList").append(can); 
             
