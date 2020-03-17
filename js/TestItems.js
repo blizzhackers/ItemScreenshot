@@ -96,7 +96,20 @@ Items = {
         "description":"\xffc2Tal Rasha's Horadric Crest (99)\n\xffc2Death Mask\n\xffc0Defense: \xffc3131\n\xffc0Durability: 20 of 20\n\xffc0Required Strength: 55\n\xffc0Required Level: 66\n\xffc310% Mana stolen per hit\n\xffc310% Life stolen per hit\n\xffc3+45 Defense\n\xffc3+60 to Life\n\xffc3+30 to Mana\n\xffc3All Resistances +15\n\xffc3Socketed (1)\n\xffc4\n\xffc4Tal Rasha's Wrappings\n\xffc2Tal Rasha's Horadric Crest\n\xffc2Tal Rasha's Guardianship\n\xffc1Tal Rasha's Lidless Eye\n\xffc1Tal Rasha's Adjudication\n\xffc2\xffc1Tal Rasha's Fine-Spun Cloth$52:358:7:4:0",
         "header":"Header",
         "sockets":["gemsocket"]
-    }
+    },
+	"testItem13": {
+		"itemColor":-1,
+		"image":"pa5",
+		"title":"Superior Vortex Shield",
+		"description":"\xffc5Superior Vortex Shield\n\xffc0Defense: \xffc3250\n\xffc0\xffc0Chance to Block: \xffc344%\n\xffc0Durability: 82 of 90\n\xffc1(Paladin Only)\n\xffc1Required Strength: 148\n\xffc1Required Level: 66\n\xffc3+11% Enhanced Defense\n\xffc3All Resistances +45\n\xffc3Socketed (3)$3667503528:502:3:0:0",
+		"header":"header",
+		"sockets":[
+			"gemsocket",
+			"gemsocket",
+			"gemsocket"
+		]
+	}
+
 
 }
 

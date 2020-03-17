@@ -20,6 +20,7 @@ var ItemScreenshot = {
     drawCursor          : "rnd",	// Draw the cursor ("rnd" is random cursor position)
     drawSockets         : true,		// Draw sockets and socketed items
     drawEthereal        : true,		// Draw ethereal item gfx
+    forceItemVisible    : true,    // Expand the background to fully show items when the description does not fit
 
     // ------ No touchy ------
 
@@ -142,352 +143,177 @@ var ItemScreenshot = {
     },
 
     drawScreenshot: function (item) {
-        var iStart = Date.now();
-        var strArray1 = this.cleanDecription(item.description);
-        var num1 = 0;
-        var tmp = document.createElement('canvas');
-        var ctx = tmp.getContext('2d');
-        ctx.font = "bold 1.5em AvQuest";
-		
-        for (var line in strArray1) {
-            let size = this.fastMode ? ctx.measureText(strArray1[line].text) : Font16.measureText(strArray1[line].text);
-            if (size.width > num1) {
-                num1 = size.width;
-            }
-        }
-
-        if (this.showItemColor && item.itemColor !== -1) {
-            strArray1.push({ text: "", color: [5]});
-            strArray1.push({ text: this.colorStrings[item.itemColor], color: [5]});
-        }
-        
-        if (num1 < 100)
-            num1 = 100;
+        return new Promise((resolve, reject) => {
+            var iStart = Date.now();
+            var strArray1 = this.cleanDecription(item.description);
+            var num1 = 0;
+            var tmp = document.createElement('canvas');
+            var ctx = tmp.getContext('2d');
+            ctx.font = "bold 1.5em AvQuest";
             
-        num2 = 16;
-        
-        if (item.itemColor === -1) {
-            item.itemColor = 21;
-        }
-
-        var image = new Image();
-        image.src = "assets/gfx/" + item.image + "/" + item.itemColor + ".png";
-        
-        image.onload = () => {
-            var X, Y, Top, Left = 0
-        
-            if (image.height < 30) {
-                Y = 1;
-                Top = 32;
-            } else if (image.height < 65) {
-                Y = 2;
-                Top = 61;
-            } else if (image.height < 95) {
-                Y = 3;
-                Top = 90;
-            } else {
-                Y = 4;
-                Top = 119;
-            }
-            
-            if (image.width < 37) {
-                X = 1;
-                Left = 213; // 212 originally
-            } else {
-                X = 2;
-                Left = 226;
-            }
-            
-            var canvas = document.createElement('canvas');
-            canvas.width = num1 + 14;
-            canvas.height = num2 * strArray1.length + Top + 1;
-            document.getElementById("itemList").append(canvas);
-            var graphics = canvas.getContext('2d');
-            
-            //console.log("Setting black canvas")
-            graphics.fillStyle = "rgba(10, 10, 10, 1)";
-            graphics.fillRect(0, 0, canvas.width, canvas.height);
-            
-            //console.log("Drawing background");
-            graphics.drawImage(this.bgnd[Y-1], canvas.width / 2 - Left, -9); // top -10 originally
-
-            //console.log("Drawing item-active background");
-            if (this.drawCursor) {
-                graphics.fillStyle = "rgba(0, 128, 0, 0.1)";
-            } else {
-                graphics.fillStyle = "rgba(0, 0, 255, 0.1)";
-            }
-            graphics.fillRect((canvas.width - image.width) / 2, 5, image.width, image.height);
-            
-            //console.log("Drawing item gfx")
-            if (this.drawEthereal && item.description.toLowerCase().indexOf("ethereal") > -1) graphics.globalAlpha = 0.5;
-            graphics.drawImage(image, Math.round((canvas.width - image.width) / 2), 5);
-            graphics.globalAlpha = 1.0;
-            
-            if (this.drawSockets) {
-                let num3 = Math.round((canvas.width - image.width) / 2);
-                let num4 = num3 + 14;
-                let num5 = num4 + 14;
-                let num6 = 5;
-                let num7 = 34;
-                let num8 = 63;
-                let num9 = 92;
-                let num10 = 14;
-                let num11 = 1;
-                let num12 = -1;
-                
-                let socketPositions = [];
-                
-                switch (item.sockets.length) {
-                case 1:
-                    if(Y === 2) {
-                        if(X === 1) {
-                            socketPositions.push({ x: num3 + num11, y: num6 + num10 + num12});
-                            break;
-                        }
-                        socketPositions.push({ x: num4 + num11, y: num6 + num10 + num12});
-                        break;
-                    }
-                    if (Y === 3) {
-                        if (X === 1) {
-                            socketPositions.push({ x: num3 + num11, y: num7 + num12});
-                            break;
-                        }
-                        socketPositions.push({ x: num4 + num11, y: num7 + num12});
-                        break;
-                    }
-                    if (X === 1) {
-                        socketPositions.push({ x: num3 + num11, y: num7 + num10 + num12});
-                        break;
-                    }
-                    socketPositions.push({ x: num4 + num11, y: num7 + num10 + num12});
-                    break;
-                case 2:
-                    if(Y === 2) {
-                        if(X === 1) {
-                            socketPositions.push({ x: num3 + num11, y: num6 + num12});
-                            socketPositions.push({ x: num3 + num11, y: num7 + num12});
-                            break;
-                        }
-                        socketPositions.push({ x: num4 + num11, y: num6 + num12});
-                        socketPositions.push({ x: num4 + num11, y: num7 + num12});
-                        break;
-                    }
-                    if (Y === 3) {
-                        if (X === 1) {
-                            socketPositions.push({ x: num3 + num11, y: num6 + num10 + num12});
-                            socketPositions.push({ x: num3 + num11, y: num7 + num10 + num12});
-                            break;
-                        }
-                        socketPositions.push({ x: num4 + num11, y: num6 + num10 + num12});
-                        socketPositions.push({ x: num4 + num11, y: num7 + num10 + num12});
-                        break;
-                    }
-                    if (X === 1) {
-                        socketPositions.push({ x: num3 + num11, y: num6 + num10 + num12});
-                        socketPositions.push({ x: num3 + num11, y: num8 + num10 + num12});
-                        break;
-                    }
-                    socketPositions.push({ x: num4 + num11, y: num6 + num10 + num12});
-                    socketPositions.push({ x: num4 + num11, y: num8 + num10 + num12});
-                    break;
-                case 3:
-                    if(Y === 2) {
-                        socketPositions.push({ x: num3 + num11, y: num6 + num12});
-                        socketPositions.push({ x: num5 + num11, y: num6 + num12});
-                        socketPositions.push({ x: num4 + num11, y: num7 + num12});
-                        break;
-                    }
-                    if (Y === 3) {
-                        if (X === 1) {
-                            socketPositions.push({ x: num3 + num11, y: num6 + num12});
-                            socketPositions.push({ x: num3 + num11, y: num7 + num12});
-                            socketPositions.push({ x: num3 + num11, y: num8 + num12});
-                            break;
-                        }
-                        socketPositions.push({ x: num4 + num11, y: num6 + num12});
-                        socketPositions.push({ x: num4 + num11, y: num7 + num12});
-                        socketPositions.push({ x: num4 + num11, y: num8 + num12});
-                        break;
-                    }
-                    if (X === 1) {
-                        socketPositions.push({ x: num3 + num11, y: num6 + num10 + num12});
-                        socketPositions.push({ x: num3 + num11, y: num7 + num10 + num12});
-                        socketPositions.push({ x: num3 + num11, y: num8 + num10 + num12});
-                        break;
-                    }
-                    socketPositions.push({ x: num4 + num11, y: num6 + num10 + num12});
-                    socketPositions.push({ x: num4 + num11, y: num7 + num10 + num12});
-                    socketPositions.push({ x: num4 + num11, y: num8 + num10 + num12});
-                    break;
-                case 4:
-                    if (Y === 3) {
-                        socketPositions.push({ x: num3 + num11, y: num6 + num10 + num12});
-                        socketPositions.push({ x: num5 + num11, y: num6 + num10 + num12});
-                        socketPositions.push({ x: num3 + num11, y: num7 + num10 + num12});
-                        socketPositions.push({ x: num5 + num11, y: num7 + num10 + num12});
-                        break;
-                    }
-                    if (Y === 2) {
-                        socketPositions.push({ x: num3 + num11, y: num6 + num12});
-                        socketPositions.push({ x: num5 + num11, y: num6 + num12});
-                        socketPositions.push({ x: num3 + num11, y: num7 + num12});
-                        socketPositions.push({ x: num5 + num11, y: num7 + num12});
-                        break;
-                    }
-                    if(X === 1) {
-                        socketPositions.push({ x: num3 + num11, y: num6 + num12});
-                        socketPositions.push({ x: num3 + num11, y: num7 + num12});
-                        socketPositions.push({ x: num3 + num11, y: num8 + num12});
-                        socketPositions.push({ x: num3 + num11, y: num9 + num12});
-                        break;
-                    }
-                    socketPositions.push({ x: num4 + num11, y: num6 + num12});
-                    socketPositions.push({ x: num4 + num11, y: num7 + num12});
-                    socketPositions.push({ x: num4 + num11, y: num8 + num12});
-                    socketPositions.push({ x: num4 + num11, y: num9 + num12});
-                    break;
-                case 5:
-                    if (Y === 3) {
-                        socketPositions.push({ x: num3 + num11, y: num6 + num12});
-                        socketPositions.push({ x: num5 + num11, y: num6 + num12});
-                        socketPositions.push({ x: num4 + num11, y: num7 + num12});
-                        socketPositions.push({ x: num3 + num11, y: num8 + num12});
-                        socketPositions.push({ x: num5 + num11, y: num8 + num12});
-                        break;
-                    }
-                    socketPositions.push({ x: num3 + num11, y: num6 + num10 + num12});
-                    socketPositions.push({ x: num5 + num11, y: num6 + num10 + num12});
-                    socketPositions.push({ x: num4 + num11, y: num7 + num10 + num12});
-                    socketPositions.push({ x: num3 + num11, y: num8 + num10 + num12});
-                    socketPositions.push({ x: num5 + num11, y: num8 + num10 + num12});
-                    break;
-                case 6:
-                    if (Y === 3) {
-                        socketPositions.push({ x: num3 + num11, y: num6 + num12});
-                        socketPositions.push({ x: num5 + num11, y: num6 + num12});
-                        socketPositions.push({ x: num3 + num11, y: num7 + num12});
-                        socketPositions.push({ x: num5 + num11, y: num7 + num12});
-                        socketPositions.push({ x: num3 + num11, y: num8 + num12});
-                        socketPositions.push({ x: num5 + num11, y: num8 + num12});
-                        break;
-                    }
-                    socketPositions.push({ x: num3 + num11, y: num6 + num10 + num12});
-                    socketPositions.push({ x: num5 + num11, y: num6 + num10 + num12});
-                    socketPositions.push({ x: num3 + num11, y: num7 + num10 + num12});
-                    socketPositions.push({ x: num5 + num11, y: num7 + num10 + num12});
-                    socketPositions.push({ x: num3 + num11, y: num8 + num10 + num12});
-                    socketPositions.push({ x: num5 + num11, y: num8 + num10 + num12});
-                    break;
-                default:
-                    break;
-                }
-
-                for (var i = 0; i < item.sockets.length && socketPositions.length; i++) {
-                    graphics.globalAlpha = 0.3;
-                    graphics.drawImage(
-                        this.socket,
-                        socketPositions[i].x - 2,
-                        socketPositions[i].y + 1
-                    );
-                    graphics.globalAlpha = 1.0;
-
-                    if (item.sockets[i] === "gemsocket") continue;
-                    var img = new Image();
-                    img.src = "assets/gfx/" + item.sockets[i] + "/21.png";
-                    img.onload = (function(pos) {
-                        return function() {
-                            graphics.drawImage(
-                                this,  // Socketed item
-                                pos.x, // X
-                                pos.y  // Y
-                            );
-                        };
-                    })(socketPositions[i]);
+            for (var line in strArray1) {
+                let size = this.fastMode ? ctx.measureText(strArray1[line].text) : Font16.measureText(strArray1[line].text);
+                if (size.width > num1) {
+                    num1 = size.width;
                 }
             }
 
-            //console.log("Drawing text");
-            
-            if (this.fastMode) {
-				graphics.font = ctx.font;
-				graphics.filter = "blur(0.2px)";
+            if (this.showItemColor && item.itemColor !== -1) {
+                strArray1.push({ text: "", color: [5]});
+                strArray1.push({ text: this.colorStrings[item.itemColor], color: [5]});
+            }
+
+            if (num1 < 100)
+                num1 = 100;
                 
-				for (var index in strArray1) {
-                    let pos = {
-                        x: canvas.width / 2,
-                        y: (index * num2 + Top + num2 - 3) // -1 originally
-                    };
-                    
-                    graphics.fillStyle = this.textColorMap[strArray1[index].color[0]];
-                    
-                    if(strArray1[index].color.length > 1) {
-                        leftText = strArray1[index].text.split("$")[0];
-                        rightText = strArray1[index].text.split("$")[1];
-                        shift = (ctx.measureText(leftText).width + ctx.measureText(rightText).width) / 2;
-                        graphics.textAlign = "left";
-                        graphics.fillText(leftText, Math.round(pos.x - shift), Math.round(pos.y));
-                        graphics.fillStyle = this.textColorMap[strArray1[index].color[1]];
-                        graphics.fillText(strArray1[index].text.split("$")[1], Math.round(pos.x + ctx.measureText(leftText).width - shift), Math.round(pos.y));
+            num2 = 16;
+
+            item.onload = () => {
+                var X, Y, Top, Left = 0
+            
+                if (item.Y === 1) {
+                    Top = 33; // 32 originally
+                } else if (item.Y === 2) {
+                    Top = 62; // 61 originally
+                } else if (item.Y === 3) {
+                    Top = 91; // 90 originally
+                } else {
+                    Top = 120; // 119 originally
+                }
+                
+                if (item.X === 1) {
+                    Left = 213; // 212 originally
+                } else {
+                    Left = 226;
+                }
+                
+                var canvas = document.createElement('canvas');
+                canvas.width = num1 + 14;
+                canvas.height = num2 * strArray1.length + Top + 1;                
+                
+                var y_cor = (canvas.height - 401);
+                var x_cor = (canvas.width/2 - Left);
+                
+                var x_ref = Math.round(canvas.width / 2);
+                
+                
+                
+                if(this.forceItemVisible || (x_cor <= 0)) {
+                    x_cor = 0;
+                }
+                
+                var graphics = canvas.getContext('2d');
+                
+                if(this.forceItemVisible) {
+                    //console.log("Setting black canvas")
+                    graphics.fillStyle = "rgba(10, 10, 10, 1)";
+                    graphics.fillRect(0, 0, canvas.width, canvas.height);
+                } else if(canvas.width > 480) {
+                    canvas.width = 480;
+                }
+                
+                //console.log("Drawing background");
+                graphics.drawImage(this.bgnd[item.Y-1], x_ref - x_cor - Left, -9); // top -10 originally
+
+                //console.log("Drawing item-active background");
+                if (this.drawCursor) {
+                    graphics.fillStyle = "rgba(0, 128, 0, 0.1)";
+                } else {
+                    graphics.fillStyle = "rgba(0, 0, 255, 0.1)";
+                }
+                graphics.fillRect(x_ref - item.width / 2 - x_cor, 5, item.width, item.height);
+                
+                //console.log("Drawing item gfx")
+                item.drawItem(graphics, Math.round(x_ref - item.width / 2 - x_cor), 5).then(graphics => {
+
+                    if (!this.forceItemVisible && (y_cor > 0)) {
+                        graphics.fillStyle = "rgba(0, 0, 0, 0.75)";
+                        graphics.fillRect(0, Top - y_cor, canvas.width, y_cor);
                     } else {
-                        graphics.textAlign = "center";
-                        graphics.fillText(strArray1[index].text, Math.round(pos.x), Math.round(pos.y));
+                        y_cor = 0;
                     }
-                }
-                graphics.filter = "None";
-            } else {
-                var index = 0;
-                strArray1.forEach((line) => {
-                    let pos = {
-                        x: canvas.width / 2,
-                        y: (index * num2 + Top - 1)
-                    };
-                    
-                    shift = Font16.measureText(line.text).width / 2;
-                    
-                    if(line.color.length > 1) {
-                        leftText = line.text.split("$")[0];
-                        rightText = line.text.split("$")[1];
-                        // Apply back half the wrong measured kerning for char '$' width 10 / 2 = 5
-                        Font16.drawText(graphics, pos.x - shift + 5, pos.y, leftText, line.color[0]);
-                        Font16.drawText(graphics, pos.x - shift + 5 + Font16.measureText(leftText).width, pos.y, rightText, line.color[1]);
+
+                    //console.log("Drawing text");
+                    if (this.fastMode) {
+                        graphics.font = ctx.font;
+                        graphics.filter = "blur(0.2px)";
+                        
+                        for (var index in strArray1) {
+                            let pos = {
+                                x: x_ref,
+                                y: (index * num2 + Top + num2 - 3 - y_cor) // -1 originally
+                            };
+                            
+                            graphics.fillStyle = this.textColorMap[strArray1[index].color[0]];
+                            
+                            if(strArray1[index].color.length > 1) {
+                                leftText = strArray1[index].text.split("$")[0];
+                                rightText = strArray1[index].text.split("$")[1];
+                                shift = (ctx.measureText(leftText).width + ctx.measureText(rightText).width) / 2;
+                                graphics.textAlign = "left";
+                                graphics.fillText(leftText, Math.round(pos.x - shift), Math.round(pos.y));
+                                graphics.fillStyle = this.textColorMap[strArray1[index].color[1]];
+                                graphics.fillText(strArray1[index].text.split("$")[1], Math.round(pos.x + ctx.measureText(leftText).width - shift), Math.round(pos.y));
+                            } else {
+                                graphics.textAlign = "center";
+                                graphics.fillText(strArray1[index].text, Math.round(pos.x), Math.round(pos.y));
+                            }
+                        }
+                        graphics.filter = "None";
                     } else {
-                        Font16.drawText(graphics, pos.x - shift, pos.y, line.text, line.color[0]);
+                        var index = 0;
+                        strArray1.forEach((line) => {
+                            let pos = {
+                                x: x_ref,
+                                y: (index * num2 + Top - 1 - y_cor)
+                            };
+                            
+                            shift = Font16.measureText(line.text).width / 2;
+                            
+                            if(line.color.length > 1) {
+                                leftText = line.text.split("$")[0];
+                                rightText = line.text.split("$")[1];
+                                // Apply back half the wrong measured kerning for char '$' width 10 / 2 = 5
+                                Font16.drawText(graphics, pos.x - shift + 5, pos.y, leftText, line.color[0]);
+                                Font16.drawText(graphics, pos.x - shift + 5 + Font16.measureText(leftText).width, pos.y, rightText, line.color[1]);
+                            } else {
+                                Font16.drawText(graphics, pos.x - shift, pos.y, line.text, line.color[0]);
+                            }
+                            index += 1;
+                        });
                     }
-                    index += 1;
+                    
+                    if (this.drawCursor) {
+                        //console.log("Drawing cursor");
+                        function rnd(min, max) {
+                          return Math.floor(Math.random() * (max - min + 1) ) + min;
+                        }
+                        graphics.drawImage(this.hand, x_ref + item.width / 2 - x_cor - (this.drawCursor=="rnd"?rnd(2,15):5), 5 + (this.drawCursor=="rnd"?rnd(2,15):5));
+                    }
+
+                    console.log("Creating item screenshot took " + (Date.now() - iStart) + "ms");
+                    resolve(graphics);
                 });
             }
-            
-            if (this.drawCursor) {
-                //console.log("Drawing cursor");
-                function rnd(min, max) {
-                  return Math.floor(Math.random() * (max - min + 1) ) + min;
-                }
-                graphics.drawImage(this.hand, (canvas.width + image.width) / 2 - (this.drawCursor=="rnd"?rnd(2,15):5), 5 + (this.drawCursor=="rnd"?rnd(2,15):5));
-            }
-
-			console.log("Creating item screenshot took " + (Date.now() - iStart) + "ms");
-        }
+        });
 	},
 		
     drawCompilation: function (items) {
         var packer = new GrowingPacker();
         var blocks = [];
-        var list = $("#itemList");
         var canvas = document.createElement('canvas');
         canvas.width = 0;
         canvas.height = 0;
         
+        screenshots = [];
         for (var idx in items) {
-            // Todo: add load callback
-           ItemScreenshot.drawScreenshot(items[idx]);
+           screenshots.push(ItemScreenshot.drawScreenshot(new Item(items[idx])));
         }
         
-        // Todo: remove timeout
-        setTimeout(function() {
-            list.children().each(function(idx) {
-                var padding = parseInt($(this).css("padding-top"));
-                blocks.push({item: $(this), w: $(this).width() + padding, h: $(this).height() + padding});
+        Promise.all(screenshots).then(results => {
+            results.forEach(item => {
+                var padding = parseInt($("#itemList").css("padding"));
+                blocks.push({item: $(item.canvas), w: item.canvas.width + padding, h: item.canvas.height + padding});
             });
             
             blocks.sort(function(a,b) { return (b.h - a.h); });
@@ -507,9 +333,8 @@ var ItemScreenshot = {
                 }
             }
 
-            $("#itemList").empty();
-            $("#itemList").addClass("visible");
-            document.getElementById("itemList").append(canvas);   
-        }, 100);
+            //$("#itemList").empty();
+            document.getElementById("itemList").append(canvas);  
+        });
     }
 }
