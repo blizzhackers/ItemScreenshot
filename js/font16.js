@@ -24,7 +24,7 @@ function Font16() {
                 }
             }
             
-            console.log("Loading font took " + (Date.now() - cStart) + "ms");
+            console.log("Prefetching font took " + (Date.now() - cStart) + "ms");
             resolve(fonts);
         };
 	}).then(result => font = result);

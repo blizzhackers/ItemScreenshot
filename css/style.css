@@ -17,6 +17,7 @@ body {
 }
 
 .itemlist {
+    padding: 10px;
     display: contents;
     text-align: center;
 }

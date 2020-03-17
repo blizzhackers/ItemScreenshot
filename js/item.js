@@ -222,7 +222,7 @@ function BaseItem() {
                     ret[item] = result[item]
                 });
             });
-            console.log("Loading sockets took " + (Date.now() - sStart) + "ms");
+            console.log("Prefetching sockets took " + (Date.now() - sStart) + "ms");
             resolve(ret);
         }); 
     }).then(result => this.socket = result);
@@ -248,7 +248,7 @@ function Item(itemData) {
 
 	var loadImage = (() => {
 		return new Promise((resolve, reject) => {
-            var iStart = Date.now();
+            //var iStart = Date.now();
             var image = new Image();
             
             image.src = "assets/gfx/" + this.image + "/" + (this.itemColor === -1?21:this.itemColor) + ".png";
@@ -426,30 +426,30 @@ function Item(itemData) {
                         break;
                 }
             
-                console.log("Loading item took " + (Date.now() - iStart) + "ms");
+                //console.log("Loading item took " + (Date.now() - iStart) + "ms");
 				this.onload(image);
                 resolve(image);
             }
         });
     }).call();
 	
-	this.drawSockets = function(graphics) {		
+	this.drawSockets = function(graphics, x, y) {		
 		promises = [];
 		for (var i = 0; i < this.socketPositions.length; i++) {
             let socket = this.socketPositions[i];
 			graphics.globalAlpha = 0.3;
 			graphics.drawImage(
 				BaseItem.socket["gemsocket"],
-				socket.x - 2,
-				socket.y + 1
+				socket.x - 2 + x,
+				socket.y + 1 + y
 			);
 			graphics.globalAlpha = 1.0;
 			
             if (socket.gfx.indexOf("gemsocket") > -1) continue;
             graphics.drawImage(
                 BaseItem.socket[socket.gfx],  	// Socketed item
-                socket.x, 		// X
-                socket.y  		// Y
+                socket.x + x, 		// X
+                socket.y + y  		// Y
             );
 			
 			promises.push(socket);
@@ -459,7 +459,7 @@ function Item(itemData) {
 	}
 	
 	this.drawItem = function(graphics, x, y) {
-		var iStart = Date.now();
+		//var iStart = Date.now();
 		
 		var canvas = document.createElement('canvas');
 		loadImage.then(result => {
@@ -469,8 +469,8 @@ function Item(itemData) {
 			graphics.drawImage(result, x, y);
 			graphics.globalAlpha = 1.0;
 
-			this.drawSockets(graphics).then(result => {
-				console.log("Drawing item image took " + (Date.now() - iStart) + "ms");
+			this.drawSockets(graphics, x, y).then(result => {
+				//console.log("Drawing item image took " + (Date.now() - iStart) + "ms");
 			});
 		});
 	}

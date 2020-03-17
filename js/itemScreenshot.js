@@ -142,157 +142,156 @@ var ItemScreenshot = {
     },
 
     drawScreenshot: function (item) {
-        var iStart = Date.now();
-        var strArray1 = this.cleanDecription(item.description);
-        var num1 = 0;
-        var tmp = document.createElement('canvas');
-        var ctx = tmp.getContext('2d');
-        ctx.font = "bold 1.5em AvQuest";
-		
-        for (var line in strArray1) {
-            let size = this.fastMode ? ctx.measureText(strArray1[line].text) : Font16.measureText(strArray1[line].text);
-            if (size.width > num1) {
-                num1 = size.width;
+        return new Promise((resolve, reject) => {
+            var iStart = Date.now();
+            var strArray1 = this.cleanDecription(item.description);
+            var num1 = 0;
+            var tmp = document.createElement('canvas');
+            var ctx = tmp.getContext('2d');
+            ctx.font = "bold 1.5em AvQuest";
+            
+            for (var line in strArray1) {
+                let size = this.fastMode ? ctx.measureText(strArray1[line].text) : Font16.measureText(strArray1[line].text);
+                if (size.width > num1) {
+                    num1 = size.width;
+                }
             }
-        }
 
-        if (this.showItemColor && item.itemColor !== -1) {
-            strArray1.push({ text: "", color: [5]});
-            strArray1.push({ text: this.colorStrings[item.itemColor], color: [5]});
-        }
-		
-		var test = new Item(item);
-		
-        if (num1 < 100)
-            num1 = 100;
-            
-        num2 = 16;
-
-        item.onload = () => {
-            var X, Y, Top, Left = 0
-        
-            if (item.X === 1) {
-                Top = 32;
-            } else if (item.X === 2) {
-                Top = 61;
-            } else if (item.X === 3) {
-                Top = 90;
-            } else {
-                Top = 119;
+            if (this.showItemColor && item.itemColor !== -1) {
+                strArray1.push({ text: "", color: [5]});
+                strArray1.push({ text: this.colorStrings[item.itemColor], color: [5]});
             }
-            
-            if (item.Y === 1) {
-                Left = 213; // 212 originally
-            } else {
-                Left = 226;
-            }
-            
-            var canvas = document.createElement('canvas');
-            canvas.width = num1 + 14;
-            canvas.height = num2 * strArray1.length + Top + 1;
-            document.getElementById("itemList").append(canvas);
-            var graphics = canvas.getContext('2d');
-            
-            //console.log("Setting black canvas")
-            graphics.fillStyle = "rgba(10, 10, 10, 1)";
-            graphics.fillRect(0, 0, canvas.width, canvas.height);
-            
-            //console.log("Drawing background");
-            graphics.drawImage(this.bgnd[item.Y-1], canvas.width / 2 - Left, -9); // top -10 originally
 
-            //console.log("Drawing item-active background");
-            if (this.drawCursor) {
-                graphics.fillStyle = "rgba(0, 128, 0, 0.1)";
-            } else {
-                graphics.fillStyle = "rgba(0, 0, 255, 0.1)";
-            }
-            graphics.fillRect((canvas.width - item.width) / 2, 5, item.width, item.height);
-            
-            //console.log("Drawing item gfx")
-			item.drawItem(graphics, Math.round((canvas.width - item.width) / 2), 5);
-            
-
-            //console.log("Drawing text");
-            
-            if (this.fastMode) {
-				graphics.font = ctx.font;
-				graphics.filter = "blur(0.2px)";
+            if (num1 < 100)
+                num1 = 100;
                 
-				for (var index in strArray1) {
-                    let pos = {
-                        x: canvas.width / 2,
-                        y: (index * num2 + Top + num2 - 3) // -1 originally
-                    };
-                    
-                    graphics.fillStyle = this.textColorMap[strArray1[index].color[0]];
-                    
-                    if(strArray1[index].color.length > 1) {
-                        leftText = strArray1[index].text.split("$")[0];
-                        rightText = strArray1[index].text.split("$")[1];
-                        shift = (ctx.measureText(leftText).width + ctx.measureText(rightText).width) / 2;
-                        graphics.textAlign = "left";
-                        graphics.fillText(leftText, Math.round(pos.x - shift), Math.round(pos.y));
-                        graphics.fillStyle = this.textColorMap[strArray1[index].color[1]];
-                        graphics.fillText(strArray1[index].text.split("$")[1], Math.round(pos.x + ctx.measureText(leftText).width - shift), Math.round(pos.y));
-                    } else {
-                        graphics.textAlign = "center";
-                        graphics.fillText(strArray1[index].text, Math.round(pos.x), Math.round(pos.y));
-                    }
-                }
-                graphics.filter = "None";
-            } else {
-                var index = 0;
-                strArray1.forEach((line) => {
-                    let pos = {
-                        x: canvas.width / 2,
-                        y: (index * num2 + Top - 1)
-                    };
-                    
-                    shift = Font16.measureText(line.text).width / 2;
-                    
-                    if(line.color.length > 1) {
-                        leftText = line.text.split("$")[0];
-                        rightText = line.text.split("$")[1];
-                        // Apply back half the wrong measured kerning for char '$' width 10 / 2 = 5
-                        Font16.drawText(graphics, pos.x - shift + 5, pos.y, leftText, line.color[0]);
-                        Font16.drawText(graphics, pos.x - shift + 5 + Font16.measureText(leftText).width, pos.y, rightText, line.color[1]);
-                    } else {
-                        Font16.drawText(graphics, pos.x - shift, pos.y, line.text, line.color[0]);
-                    }
-                    index += 1;
-                });
-            }
-            
-            if (this.drawCursor) {
-                //console.log("Drawing cursor");
-                function rnd(min, max) {
-                  return Math.floor(Math.random() * (max - min + 1) ) + min;
-                }
-                graphics.drawImage(this.hand, (canvas.width + item.width) / 2 - (this.drawCursor=="rnd"?rnd(2,15):5), 5 + (this.drawCursor=="rnd"?rnd(2,15):5));
-            }
+            num2 = 16;
 
-			console.log("Creating item screenshot took " + (Date.now() - iStart) + "ms");
-        }
+            item.onload = () => {
+                var X, Y, Top, Left = 0
+            
+                if (item.Y === 1) {
+                    Top = 32;
+                } else if (item.Y === 2) {
+                    Top = 61;
+                } else if (item.Y === 3) {
+                    Top = 90;
+                } else {
+                    Top = 119;
+                }
+                
+                if (item.X === 1) {
+                    Left = 213; // 212 originally
+                } else {
+                    Left = 226;
+                }
+                
+                var canvas = document.createElement('canvas');
+                canvas.width = num1 + 14;
+                canvas.height = num2 * strArray1.length + Top + 1;
+                //document.getElementById("itemList").append(canvas);
+                var graphics = canvas.getContext('2d');
+                
+                //console.log("Setting black canvas")
+                graphics.fillStyle = "rgba(10, 10, 10, 1)";
+                graphics.fillRect(0, 0, canvas.width, canvas.height);
+                
+                //console.log("Drawing background");
+                graphics.drawImage(this.bgnd[item.Y-1], canvas.width / 2 - Left, -9); // top -10 originally
+
+                //console.log("Drawing item-active background");
+                if (this.drawCursor) {
+                    graphics.fillStyle = "rgba(0, 128, 0, 0.1)";
+                } else {
+                    graphics.fillStyle = "rgba(0, 0, 255, 0.1)";
+                }
+                graphics.fillRect((canvas.width - item.width) / 2, 5, item.width, item.height);
+                
+                //console.log("Drawing item gfx")
+                item.drawItem(graphics, Math.round((canvas.width - item.width) / 2), 5);
+                
+
+                //console.log("Drawing text");
+                
+                if (this.fastMode) {
+                    graphics.font = ctx.font;
+                    graphics.filter = "blur(0.2px)";
+                    
+                    for (var index in strArray1) {
+                        let pos = {
+                            x: canvas.width / 2,
+                            y: (index * num2 + Top + num2 - 3) // -1 originally
+                        };
+                        
+                        graphics.fillStyle = this.textColorMap[strArray1[index].color[0]];
+                        
+                        if(strArray1[index].color.length > 1) {
+                            leftText = strArray1[index].text.split("$")[0];
+                            rightText = strArray1[index].text.split("$")[1];
+                            shift = (ctx.measureText(leftText).width + ctx.measureText(rightText).width) / 2;
+                            graphics.textAlign = "left";
+                            graphics.fillText(leftText, Math.round(pos.x - shift), Math.round(pos.y));
+                            graphics.fillStyle = this.textColorMap[strArray1[index].color[1]];
+                            graphics.fillText(strArray1[index].text.split("$")[1], Math.round(pos.x + ctx.measureText(leftText).width - shift), Math.round(pos.y));
+                        } else {
+                            graphics.textAlign = "center";
+                            graphics.fillText(strArray1[index].text, Math.round(pos.x), Math.round(pos.y));
+                        }
+                    }
+                    graphics.filter = "None";
+                } else {
+                    var index = 0;
+                    strArray1.forEach((line) => {
+                        let pos = {
+                            x: canvas.width / 2,
+                            y: (index * num2 + Top - 1)
+                        };
+                        
+                        shift = Font16.measureText(line.text).width / 2;
+                        
+                        if(line.color.length > 1) {
+                            leftText = line.text.split("$")[0];
+                            rightText = line.text.split("$")[1];
+                            // Apply back half the wrong measured kerning for char '$' width 10 / 2 = 5
+                            Font16.drawText(graphics, pos.x - shift + 5, pos.y, leftText, line.color[0]);
+                            Font16.drawText(graphics, pos.x - shift + 5 + Font16.measureText(leftText).width, pos.y, rightText, line.color[1]);
+                        } else {
+                            Font16.drawText(graphics, pos.x - shift, pos.y, line.text, line.color[0]);
+                        }
+                        index += 1;
+                    });
+                }
+                
+                if (this.drawCursor) {
+                    //console.log("Drawing cursor");
+                    function rnd(min, max) {
+                      return Math.floor(Math.random() * (max - min + 1) ) + min;
+                    }
+                    graphics.drawImage(this.hand, (canvas.width + item.width) / 2 - (this.drawCursor=="rnd"?rnd(2,15):5), 5 + (this.drawCursor=="rnd"?rnd(2,15):5));
+                }
+
+                console.log("Creating item screenshot took " + (Date.now() - iStart) + "ms");
+                resolve(graphics);
+            }
+        });
 	},
 		
     drawCompilation: function (items) {
         var packer = new GrowingPacker();
         var blocks = [];
-        var list = $("#itemList");
         var canvas = document.createElement('canvas');
         canvas.width = 0;
         canvas.height = 0;
         
+        screenshots = [];
         for (var idx in items) {
-            // Todo: add load callback
-           ItemScreenshot.drawScreenshot(new Item(items[idx]));
+           screenshots.push(ItemScreenshot.drawScreenshot(new Item(items[idx])));
         }
         
-        // Todo: remove timeout
-        setTimeout(function() {
-            list.children().each(function(idx) {
-                var padding = parseInt($(this).css("padding-top"));
-                blocks.push({item: $(this), w: $(this).width() + padding, h: $(this).height() + padding});
+        Promise.all(screenshots).then(results => {
+            results.forEach(item => {
+                var padding = parseInt($("#itemList").css("padding"));
+                blocks.push({item: $(item.canvas), w: item.canvas.width + padding, h: item.canvas.height + padding});
             });
             
             blocks.sort(function(a,b) { return (b.h - a.h); });
@@ -312,23 +311,8 @@ var ItemScreenshot = {
                 }
             }
 
-            $("#itemList").empty();
+            //$("#itemList").empty();
             document.getElementById("itemList").append(canvas);  
-
-
-            var can = document.createElement('canvas');
-            can.width = 0;
-            can.height = 0;
-            can.width = Object.keys(BaseItem.socket).length * 28;
-            can.height = 28;
-            var ctx = can.getContext('2d');
-            let i = 0;
-            Object.keys(BaseItem.socket).forEach(socket => {
-				ctx.drawImage(BaseItem.socket[socket], 28 * i, 0);
-				i++;
-            });
-            document.getElementById("itemList").append(can); 
-            
-        }, 200);
+        });
     }
 }
