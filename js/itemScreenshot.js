@@ -20,6 +20,7 @@ var ItemScreenshot = {
     drawCursor          : "rnd",	// Draw the cursor ("rnd" is random cursor position)
     drawSockets         : true,		// Draw sockets and socketed items
     drawEthereal        : true,		// Draw ethereal item gfx
+    forceItemVisible    : true,    // Expand the background to fully show items when the description does not fit
 
     // ------ No touchy ------
 
@@ -171,13 +172,13 @@ var ItemScreenshot = {
                 var X, Y, Top, Left = 0
             
                 if (item.Y === 1) {
-                    Top = 32;
+                    Top = 33; // 32 originally
                 } else if (item.Y === 2) {
-                    Top = 61;
+                    Top = 62; // 61 originally
                 } else if (item.Y === 3) {
-                    Top = 90;
+                    Top = 91; // 90 originally
                 } else {
-                    Top = 119;
+                    Top = 120; // 119 originally
                 }
                 
                 if (item.X === 1) {
@@ -188,16 +189,31 @@ var ItemScreenshot = {
                 
                 var canvas = document.createElement('canvas');
                 canvas.width = num1 + 14;
-                canvas.height = num2 * strArray1.length + Top + 1;
-                //document.getElementById("itemList").append(canvas);
+                canvas.height = num2 * strArray1.length + Top + 1;                
+                
+                var y_cor = (canvas.height - 401);
+                var x_cor = (canvas.width/2 - Left);
+                
+                var x_ref = Math.round(canvas.width / 2);
+                
+                
+                
+                if(this.forceItemVisible || (x_cor <= 0)) {
+                    x_cor = 0;
+                }
+                
                 var graphics = canvas.getContext('2d');
                 
-                //console.log("Setting black canvas")
-                graphics.fillStyle = "rgba(10, 10, 10, 1)";
-                graphics.fillRect(0, 0, canvas.width, canvas.height);
+                if(this.forceItemVisible) {
+                    //console.log("Setting black canvas")
+                    graphics.fillStyle = "rgba(10, 10, 10, 1)";
+                    graphics.fillRect(0, 0, canvas.width, canvas.height);
+                } else if(canvas.width > 480) {
+                    canvas.width = 480;
+                }
                 
                 //console.log("Drawing background");
-                graphics.drawImage(this.bgnd[item.Y-1], canvas.width / 2 - Left, -9); // top -10 originally
+                graphics.drawImage(this.bgnd[item.Y-1], x_ref - x_cor - Left, -9); // top -10 originally
 
                 //console.log("Drawing item-active background");
                 if (this.drawCursor) {
@@ -205,73 +221,79 @@ var ItemScreenshot = {
                 } else {
                     graphics.fillStyle = "rgba(0, 0, 255, 0.1)";
                 }
-                graphics.fillRect((canvas.width - item.width) / 2, 5, item.width, item.height);
+                graphics.fillRect(x_ref - item.width / 2 - x_cor, 5, item.width, item.height);
                 
                 //console.log("Drawing item gfx")
-                item.drawItem(graphics, Math.round((canvas.width - item.width) / 2), 5);
-                
+                item.drawItem(graphics, Math.round(x_ref - item.width / 2 - x_cor), 5).then(graphics => {
 
-                //console.log("Drawing text");
-                
-                if (this.fastMode) {
-                    graphics.font = ctx.font;
-                    graphics.filter = "blur(0.2px)";
+                    if (!this.forceItemVisible && (y_cor > 0)) {
+                        graphics.fillStyle = "rgba(0, 0, 0, 0.75)";
+                        graphics.fillRect(0, Top - y_cor, canvas.width, y_cor);
+                    } else {
+                        y_cor = 0;
+                    }
+
+                    //console.log("Drawing text");
+                    if (this.fastMode) {
+                        graphics.font = ctx.font;
+                        graphics.filter = "blur(0.2px)";
+                        
+                        for (var index in strArray1) {
+                            let pos = {
+                                x: x_ref,
+                                y: (index * num2 + Top + num2 - 3 - y_cor) // -1 originally
+                            };
+                            
+                            graphics.fillStyle = this.textColorMap[strArray1[index].color[0]];
+                            
+                            if(strArray1[index].color.length > 1) {
+                                leftText = strArray1[index].text.split("$")[0];
+                                rightText = strArray1[index].text.split("$")[1];
+                                shift = (ctx.measureText(leftText).width + ctx.measureText(rightText).width) / 2;
+                                graphics.textAlign = "left";
+                                graphics.fillText(leftText, Math.round(pos.x - shift), Math.round(pos.y));
+                                graphics.fillStyle = this.textColorMap[strArray1[index].color[1]];
+                                graphics.fillText(strArray1[index].text.split("$")[1], Math.round(pos.x + ctx.measureText(leftText).width - shift), Math.round(pos.y));
+                            } else {
+                                graphics.textAlign = "center";
+                                graphics.fillText(strArray1[index].text, Math.round(pos.x), Math.round(pos.y));
+                            }
+                        }
+                        graphics.filter = "None";
+                    } else {
+                        var index = 0;
+                        strArray1.forEach((line) => {
+                            let pos = {
+                                x: x_ref,
+                                y: (index * num2 + Top - 1 - y_cor)
+                            };
+                            
+                            shift = Font16.measureText(line.text).width / 2;
+                            
+                            if(line.color.length > 1) {
+                                leftText = line.text.split("$")[0];
+                                rightText = line.text.split("$")[1];
+                                // Apply back half the wrong measured kerning for char '$' width 10 / 2 = 5
+                                Font16.drawText(graphics, pos.x - shift + 5, pos.y, leftText, line.color[0]);
+                                Font16.drawText(graphics, pos.x - shift + 5 + Font16.measureText(leftText).width, pos.y, rightText, line.color[1]);
+                            } else {
+                                Font16.drawText(graphics, pos.x - shift, pos.y, line.text, line.color[0]);
+                            }
+                            index += 1;
+                        });
+                    }
                     
-                    for (var index in strArray1) {
-                        let pos = {
-                            x: canvas.width / 2,
-                            y: (index * num2 + Top + num2 - 3) // -1 originally
-                        };
-                        
-                        graphics.fillStyle = this.textColorMap[strArray1[index].color[0]];
-                        
-                        if(strArray1[index].color.length > 1) {
-                            leftText = strArray1[index].text.split("$")[0];
-                            rightText = strArray1[index].text.split("$")[1];
-                            shift = (ctx.measureText(leftText).width + ctx.measureText(rightText).width) / 2;
-                            graphics.textAlign = "left";
-                            graphics.fillText(leftText, Math.round(pos.x - shift), Math.round(pos.y));
-                            graphics.fillStyle = this.textColorMap[strArray1[index].color[1]];
-                            graphics.fillText(strArray1[index].text.split("$")[1], Math.round(pos.x + ctx.measureText(leftText).width - shift), Math.round(pos.y));
-                        } else {
-                            graphics.textAlign = "center";
-                            graphics.fillText(strArray1[index].text, Math.round(pos.x), Math.round(pos.y));
+                    if (this.drawCursor) {
+                        //console.log("Drawing cursor");
+                        function rnd(min, max) {
+                          return Math.floor(Math.random() * (max - min + 1) ) + min;
                         }
+                        graphics.drawImage(this.hand, x_ref + item.width / 2 - x_cor - (this.drawCursor=="rnd"?rnd(2,15):5), 5 + (this.drawCursor=="rnd"?rnd(2,15):5));
                     }
-                    graphics.filter = "None";
-                } else {
-                    var index = 0;
-                    strArray1.forEach((line) => {
-                        let pos = {
-                            x: canvas.width / 2,
-                            y: (index * num2 + Top - 1)
-                        };
-                        
-                        shift = Font16.measureText(line.text).width / 2;
-                        
-                        if(line.color.length > 1) {
-                            leftText = line.text.split("$")[0];
-                            rightText = line.text.split("$")[1];
-                            // Apply back half the wrong measured kerning for char '$' width 10 / 2 = 5
-                            Font16.drawText(graphics, pos.x - shift + 5, pos.y, leftText, line.color[0]);
-                            Font16.drawText(graphics, pos.x - shift + 5 + Font16.measureText(leftText).width, pos.y, rightText, line.color[1]);
-                        } else {
-                            Font16.drawText(graphics, pos.x - shift, pos.y, line.text, line.color[0]);
-                        }
-                        index += 1;
-                    });
-                }
-                
-                if (this.drawCursor) {
-                    //console.log("Drawing cursor");
-                    function rnd(min, max) {
-                      return Math.floor(Math.random() * (max - min + 1) ) + min;
-                    }
-                    graphics.drawImage(this.hand, (canvas.width + item.width) / 2 - (this.drawCursor=="rnd"?rnd(2,15):5), 5 + (this.drawCursor=="rnd"?rnd(2,15):5));
-                }
 
-                console.log("Creating item screenshot took " + (Date.now() - iStart) + "ms");
-                resolve(graphics);
+                    console.log("Creating item screenshot took " + (Date.now() - iStart) + "ms");
+                    resolve(graphics);
+                });
             }
         });
 	},
