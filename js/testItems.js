@@ -97,7 +97,7 @@ var Items = {
         "header":"Header",
         "sockets":["gemsocket"]
     },
-	"testItem13": {
+	"testItem14": {
 		"itemColor":-1,
 		"image":"pa5",
 		"title":"Superior Vortex Shield",
