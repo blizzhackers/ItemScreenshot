@@ -1,4 +1,4 @@
-Items = {
+var Items = {
     "testItem1": { // Somewhat regular item
         "itemColor":14,
         "image":"mgl",
