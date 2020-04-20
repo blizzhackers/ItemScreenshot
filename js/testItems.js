@@ -108,7 +108,15 @@ var Items = {
 			"gemsocket",
 			"gemsocket"
 		]
-	}
+	},
+    "testItem15": {
+        "itemColor":14,
+        "image":"am5",
+        "title":"Fiend Pale Matriarchal Javelin",
+        "description":"\xffc9Fiend Pale (80)\n\xffc9Matriarchal Javelin\n\xffc0Throw Damage: \xffc335 to \xffc379\n\xffc0One-Hand Damage: \xffc330 to 67\n\xffc0Quantity: 59\n\xffc0(Amazon Only)\n\xffc1Required Dexterity: 151\n\xffc1Required Strength: 107\n\xffc1Required Level: 48\n\xffc0Javelin Class - \xffc3Very Fast Attack Speed\n\xffc3+2 to Javelin and Spear Skills (Amazon Only)\n\xffc3+2 to Amazon Skill Levels\n\xffc3+40% Increased Attack Speed\n\xffc3+13 to Maximum Damage\n\xffc3+21 to Attack Rating\n\xffc38% Life stolen per hit$604089369:305:7:5:0",
+        "header":"xxxxxxxxx / xxxxxxxx",
+        "sockets":[]
+    }
 
 
 }
